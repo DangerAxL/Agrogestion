@@ -1,0 +1,8 @@
+git fetch origin
+git rebase origin/{main}
+composer install --no-interaction --prefer-dist --optimize-autoloader
+npm ci || npm install
+vendor/bin/pint
+php artisan test --compact
+# Opcional: si necesitas ver cambios de frontend en caliente
+npm run dev
