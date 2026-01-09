@@ -1,12 +1,5 @@
 {
-    "agents": [
-        "claude_code",
-        "opencode"
-    ],
-    "editors": [
-        "claude_code",
-        "opencode",
-        "vscode"
-    ],
+    "agents": ["claude_code", "opencode"],
+    "editors": ["claude_code", "opencode", "vscode"],
     "guidelines": []
 }

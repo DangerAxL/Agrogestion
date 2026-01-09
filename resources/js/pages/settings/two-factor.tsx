@@ -38,7 +38,7 @@ export default function TwoFactor({
         fetchRecoveryCodes,
         errors,
     } = useTwoFactorAuth();
-    const [showSetupModal, setShowSetupModal] = useState<boolean>(false);
+    const [showSetupModal, setMostrarSetupModal] = useState<boolean>(false);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -95,7 +95,9 @@ export default function TwoFactor({
                             <div>
                                 {hasSetupData ? (
                                     <Button
-                                        onClick={() => setShowSetupModal(true)}
+                                        onClick={() =>
+                                            setMostrarSetupModal(true)
+                                        }
                                     >
                                         <ShieldCheck />
                                         Continue Setup
@@ -104,7 +106,7 @@ export default function TwoFactor({
                                     <Form
                                         {...enable.form()}
                                         onSuccess={() =>
-                                            setShowSetupModal(true)
+                                            setMostrarSetupModal(true)
                                         }
                                     >
                                         {({ processing }) => (
@@ -124,7 +126,7 @@ export default function TwoFactor({
 
                     <TwoFactorSetupModal
                         isOpen={showSetupModal}
-                        onClose={() => setShowSetupModal(false)}
+                        onClose={() => setMostrarSetupModal(false)}
                         requiresConfirmation={requiresConfirmation}
                         twoFactorEnabled={twoFactorEnabled}
                         qrCodeSvg={qrCodeSvg}

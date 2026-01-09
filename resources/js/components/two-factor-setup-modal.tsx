@@ -140,10 +140,10 @@ function TwoFactorSetupStep({
 
 function TwoFactorVerificationStep({
     onClose,
-    onBack,
+    onAtrás,
 }: {
     onClose: () => void;
-    onBack: () => void;
+    onAtrás: () => void;
 }) {
     const [code, setCode] = useState<string>('');
     const pinInputContainerRef = useRef<HTMLDivElement>(null);
@@ -206,10 +206,10 @@ function TwoFactorVerificationStep({
                                 type="button"
                                 variant="outline"
                                 className="flex-1"
-                                onClick={onBack}
+                                onClick={onAtrás}
                                 disabled={processing}
                             >
-                                Back
+                                Atrás
                             </Button>
                             <Button
                                 type="submit"
@@ -251,7 +251,7 @@ export default function TwoFactorSetupModal({
     fetchSetupData,
     errors,
 }: TwoFactorSetupModalProps) {
-    const [showVerificationStep, setShowVerificationStep] =
+    const [showVerificationStep, setMostrarVerificationStep] =
         useState<boolean>(false);
 
     const modalConfig = useMemo<{
@@ -287,7 +287,7 @@ export default function TwoFactorSetupModal({
 
     const handleModalNextStep = useCallback(() => {
         if (requiresConfirmation) {
-            setShowVerificationStep(true);
+            setMostrarVerificationStep(true);
             return;
         }
 
@@ -296,7 +296,7 @@ export default function TwoFactorSetupModal({
     }, [requiresConfirmation, clearSetupData, onClose]);
 
     const resetModalState = useCallback(() => {
-        setShowVerificationStep(false);
+        setMostrarVerificationStep(false);
 
         if (twoFactorEnabled) {
             clearSetupData();
@@ -329,7 +329,7 @@ export default function TwoFactorSetupModal({
                     {showVerificationStep ? (
                         <TwoFactorVerificationStep
                             onClose={onClose}
-                            onBack={() => setShowVerificationStep(false)}
+                            onAtrás={() => setMostrarVerificationStep(false)}
                         />
                     ) : (
                         <TwoFactorSetupStep

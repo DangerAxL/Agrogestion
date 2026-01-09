@@ -13,7 +13,7 @@ import AuthLayout from '@/layouts/auth-layout';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
+            title="Crear an account"
             description="Enter your details below to create your account"
         >
             <Head title="Register" />
@@ -97,7 +97,7 @@ export default function Register() {
                                 data-test="register-user-button"
                             >
                                 {processing && <Spinner />}
-                                Create account
+                                Crear account
                             </Button>
                         </div>
 

@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('feedings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('lot_id')->constrained('lots')->cascadeOnDelete();
+            $table->foreignId('feed_type_id')->constrained('feed_types')->cascadeOnDelete();
+            $table->timestamp('date')->useCurrent();
+            $table->decimal('ration_kg', 10, 2);
+            $table->decimal('total_ration', 12, 2);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('feedings');
+    }
+};

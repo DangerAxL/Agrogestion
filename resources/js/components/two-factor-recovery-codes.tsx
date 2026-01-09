@@ -36,7 +36,7 @@ export default function TwoFactorRecoveryCodes({
 
         if (!codesAreVisible) {
             setTimeout(() => {
-                codesSectionRef.current?.scrollIntoView({
+                codesSectionRef.current?.scrollIntoVer({
                     behavior: 'smooth',
                     block: 'nearest',
                 });
@@ -76,7 +76,7 @@ export default function TwoFactorRecoveryCodes({
                             className="size-4"
                             aria-hidden="true"
                         />
-                        {codesAreVisible ? 'Hide' : 'View'} Recovery Codes
+                        {codesAreVisible ? 'Hide' : 'Ver'} Recovery Codes
                     </Button>
 
                     {canRegenerateCodes && (
