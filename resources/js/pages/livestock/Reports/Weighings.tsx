@@ -96,7 +96,7 @@ export default function Weighings({ weighings, animals, filters }: Props) {
                                         <SelectValue placeholder="All animals" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">
+                                        <SelectItem value="all">
                                             All animals
                                         </SelectItem>
                                         {animals.map((animal) => (

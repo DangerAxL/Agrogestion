@@ -17,10 +17,34 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
 
-        User::factory()->create([
+        $user = User::firstOrCreate([
+            'email' => 'test@example.com',
+        ], [
             'name' => 'Test User',
             'email' => 'test@example.com',
-            'role' => 'PRODUCTOR',
+            'password' => bcrypt('password'),
         ]);
+
+        $user->assignRole('PRODUCTOR');
+
+        $veterinarian = User::firstOrCreate([
+            'email' => 'vet@example.com',
+        ], [
+            'name' => 'Veterinarian User',
+            'email' => 'vet@example.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        $veterinarian->assignRole('VETERINARIO');
+
+        // Create sample data
+        \App\Models\Breed::factory(3)->create();
+        \App\Models\Lot::factory(3)->create();
+        \App\Models\FeedType::factory(4)->create();
+        \App\Models\Supply::factory(10)->create();
+        \App\Models\Animal::factory(50)->create();
+        \App\Models\Weighing::factory(100)->create();
+        \App\Models\HealthRecord::factory(30)->create();
+        \App\Models\Feeding::factory(60)->create();
     }
 }

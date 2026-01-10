@@ -15,12 +15,13 @@ class StoreHealthRecordRequest extends FormRequest
     {
         return [
             'animal_id' => 'required|exists:animals,id',
-            'disease' => 'required|string|max:100',
-            'treatment' => 'nullable|string',
+            'type' => 'required|string|max:100',
+            'description' => 'nullable|string',
             'date' => 'required|date',
             'veterinarian_id' => 'required|exists:users,id',
-            'withdrawal_days' => 'required|integer|min:0',
-            'release_date' => 'required|date|after:date',
+            'cost' => 'nullable|numeric|min:0',
+            'withdrawal_days' => 'nullable|integer|min:0',
+            'release_date' => 'nullable|date|after:date',
             'observations' => 'nullable|string',
         ];
     }

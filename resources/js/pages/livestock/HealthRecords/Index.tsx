@@ -2,14 +2,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { create, edit, index, show } from '@/routes/health-records';
+import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Livestock',
-        href: '/livestock',
+        title: 'Dashboard',
+        href: dashboard.url(),
     },
     {
         title: 'Health Records',

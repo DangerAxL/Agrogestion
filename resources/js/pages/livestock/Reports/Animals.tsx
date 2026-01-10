@@ -11,7 +11,7 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -30,15 +30,19 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Animal {
     id: number;
-    name: string;
+    caravana: string;
     breed?: {
         name: string;
     };
     lot?: {
         name: string;
     };
-    gender: 'male' | 'female';
-    status?: string;
+    weight_entry: number;
+    weight_current: number;
+    status: string;
+    active: boolean;
+    entry_date?: string;
+    withdrawal_date?: string;
 }
 
 interface Lot {
@@ -76,6 +80,20 @@ export default function Animals({ animals, lots, filters }: Props) {
                             </p>
                         </div>
                     </div>
+                    <div className="flex gap-2">
+                        <Button variant="outline" size="sm" asChild>
+                            <a href={`/reports/animals?${new URLSearchParams(filters as any).toString()}&export=pdf`}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Export PDF
+                            </a>
+                        </Button>
+                        <Button variant="outline" size="sm" asChild>
+                            <a href={`/reports/animals?${new URLSearchParams(filters as any).toString()}&export=excel`}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Export Excel
+                            </a>
+                        </Button>
+                    </div>
                 </div>
                 <Card>
                     <CardHeader>
@@ -97,7 +115,7 @@ export default function Animals({ animals, lots, filters }: Props) {
                                         <SelectValue placeholder="All lots" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">
+                                        <SelectItem value="all">
                                             All lots
                                         </SelectItem>
                                         {lots.map((lot) => (
@@ -130,12 +148,12 @@ export default function Animals({ animals, lots, filters }: Props) {
                                 >
                                     <div>
                                         <h3 className="font-semibold">
-                                            {animal.name}
+                                            {animal.caravana}
                                         </h3>
                                         <p className="text-sm text-muted-foreground">
                                             {animal.breed?.name} •{' '}
-                                            {animal.lot?.name} • {animal.gender}{' '}
-                                            • {animal.status}
+                                            {animal.lot?.name} • {animal.status}{' '}
+                                            • {animal.active ? 'Activo' : 'Inactivo'}
                                         </p>
                                     </div>
                                 </div>

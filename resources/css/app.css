@@ -13,6 +13,87 @@
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
 
+    --color-brand: oklch(0.72 0.11 178);
+
+    --color-pacific-blue-50: #ebf7f9;
+    --color-pacific-blue-100: #d7eef4;
+    --color-pacific-blue-200: #b0dee8;
+    --color-pacific-blue-300: #88cddd;
+    --color-pacific-blue-400: #61bdd1;
+    --color-pacific-blue-500: #39acc6;
+    --color-pacific-blue-600: #2e8a9e;
+    --color-pacific-blue-700: #226777;
+    --color-pacific-blue-800: #17454f;
+    --color-pacific-blue-900: #0b2228;
+    --color-pacific-blue-950: #08181c;
+
+    --color-frosted-blue-50: #eef6f7;
+    --color-frosted-blue-100: #dcedef;
+    --color-frosted-blue-200: #b9dcdf;
+    --color-frosted-blue-300: #96cacf;
+    --color-frosted-blue-400: #73b8bf;
+    --color-frosted-blue-500: #50a7af;
+    --color-frosted-blue-600: #40858c;
+    --color-frosted-blue-700: #306469;
+    --color-frosted-blue-800: #204346;
+    --color-frosted-blue-900: #102123;
+    --color-frosted-blue-950: #0b1718;
+
+    --color-ash-grey-50: #f2f3f2;
+    --color-ash-grey-100: #e5e7e4;
+    --color-ash-grey-200: #cbcfc9;
+    --color-ash-grey-300: #b1b6af;
+    --color-ash-grey-400: #979e94;
+    --color-ash-grey-500: #7d8679;
+    --color-ash-grey-600: #646b61;
+    --color-ash-grey-700: #4b5049;
+    --color-ash-grey-800: #323630;
+    --color-ash-grey-900: #191b18;
+    --color-ash-grey-950: #111311;
+
+    --color-almond-cream-50: #f9f2eb;
+    --color-almond-cream-100: #f4e6d7;
+    --color-almond-cream-200: #e8ccb0;
+    --color-almond-cream-300: #ddb388;
+    --color-almond-cream-400: #d19961;
+    --color-almond-cream-500: #c68039;
+    --color-almond-cream-600: #9e662e;
+    --color-almond-cream-700: #774d22;
+    --color-almond-cream-800: #4f3317;
+    --color-almond-cream-900: #281a0b;
+    --color-almond-cream-950: #1c1208;
+
+    --color-tea-green-50: #e1eadc;
+    --color-tea-green-100: #bfd8bd;
+    --color-tea-green-200: #99ad97;
+    --color-tea-green-400: #738271;
+    --color-tea-green-700: #4d564b;
+    --color-tea-green-800: #394138;
+    --color-tea-green-900: #252a24;
+    --color-tea-green-950: #394138;
+
+    --color-celadon-100: #e0f0e3;
+    --color-celadon-500: #98c9a3;
+    --color-celadon-600: #89b593;
+    --color-celadon-700: #7aa182;
+
+    --color-cream-50: #fdfdf6;
+    --color-cream-100: #fbfbe9;
+    --color-cream-200: #f7f7d3;
+
+    --color-beige-50: #f9faf0;
+    --color-beige-100: #f1f3e1;
+    --color-beige-200: #eef3d2;
+    --color-beige-300: #e6ebc1;
+    --color-beige-400: #d7dfa1;
+    --color-beige-500: #bdbe9f;
+    --color-beige-600: #a1a288;
+
+    --color-muted-teal-100: #e1ede9;
+    --color-muted-teal-600: #6bac93;
+    --color-muted-teal-700: #5c947e;
+    --color-muted-teal-800: #4d7b69;
+
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);

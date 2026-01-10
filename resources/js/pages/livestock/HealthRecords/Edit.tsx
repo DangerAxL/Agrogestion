@@ -34,22 +34,31 @@ interface Animal {
     name: string;
 }
 
+interface User {
+    id: number;
+    name: string;
+}
+
 interface HealthRecord {
     id: number;
     animal_id: number;
     type: string;
     description: string;
     date: string;
-    veterinarian?: string;
+    veterinarian_id?: number;
     cost?: number;
+    withdrawal_days?: number;
+    release_date?: string;
+    observations?: string;
 }
 
 interface Props {
     healthRecord: HealthRecord;
     animals: Animal[];
+    veterinarians: User[];
 }
 
-export default function Editar({ healthRecord, animals }: Props) {
+export default function Editar({ healthRecord, animals, veterinarians }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={`Editar Health Record: ${healthRecord.type}`} />
@@ -124,14 +133,26 @@ export default function Editar({ healthRecord, animals }: Props) {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="veterinarian">
-                                    Veterinarian
-                                </Label>
-                                <Input
-                                    id="veterinarian"
-                                    name="veterinarian"
-                                    defaultValue={healthRecord.veterinarian}
-                                />
+                                <Label htmlFor="veterinarian_id">Veterinarian</Label>
+                                <Select
+                                    name="veterinarian_id"
+                                    defaultValue={healthRecord.veterinarian_id?.toString()}
+                                    required
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {veterinarians.map((veterinarian) => (
+                                            <SelectItem
+                                                key={veterinarian.id}
+                                                value={veterinarian.id.toString()}
+                                            >
+                                                {veterinarian.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div>
                                 <Label htmlFor="cost">Cost</Label>
@@ -141,6 +162,33 @@ export default function Editar({ healthRecord, animals }: Props) {
                                     type="number"
                                     step="0.01"
                                     defaultValue={healthRecord.cost}
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="withdrawal_days">Withdrawal Days</Label>
+                                <Input
+                                    id="withdrawal_days"
+                                    name="withdrawal_days"
+                                    type="number"
+                                    min="0"
+                                    defaultValue={healthRecord.withdrawal_days}
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="release_date">Release Date</Label>
+                                <Input
+                                    id="release_date"
+                                    name="release_date"
+                                    type="date"
+                                    defaultValue={healthRecord.release_date}
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="observations">Observations</Label>
+                                <Input
+                                    id="observations"
+                                    name="observations"
+                                    defaultValue={healthRecord.observations}
                                 />
                             </div>
                             <Button type="submit">Update Health Record</Button>

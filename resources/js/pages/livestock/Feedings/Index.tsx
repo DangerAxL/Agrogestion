@@ -2,14 +2,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { create, edit, index, show } from '@/routes/feedings';
+import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Livestock',
-        href: '/livestock',
+        title: 'Dashboard',
+        href: dashboard.url(),
     },
     {
         title: 'Feedings',
@@ -19,17 +20,15 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Feeding {
     id: number;
-    animal?: {
-        name: string;
-    };
     lot?: {
         name: string;
     };
-    feed_type: string;
-    quantity: number;
-    unit: string;
+    feedType?: {
+        name: string;
+    };
+    ration_kg: number;
+    total_ration: number;
     date: string;
-    cost?: number;
 }
 
 interface Props {
@@ -74,14 +73,12 @@ export default function Index({ feedings }: Props) {
                                 >
                                     <div>
                                         <h3 className="font-semibold">
-                                            {feeding.feed_type} -{' '}
-                                            {feeding.quantity} {feeding.unit}
+                                            {feeding.feedType?.name} -{' '}
+                                            {feeding.ration_kg} kg
                                         </h3>
                                         <p className="text-sm text-muted-foreground">
-                                            {feeding.animal?.name ||
-                                                feeding.lot?.name}{' '}
-                                            • {feeding.date} • $
-                                            {feeding.cost || 0}
+                                            {feeding.lot?.name}{' '}
+                                            • {feeding.date} • Total: {feeding.total_ration} kg
                                         </p>
                                     </div>
                                     <div className="flex gap-2">

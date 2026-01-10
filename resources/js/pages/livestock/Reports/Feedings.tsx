@@ -111,7 +111,7 @@ export default function Feedings({
                                         <SelectValue placeholder="All animals" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">
+                                        <SelectItem value="all">
                                             All animals
                                         </SelectItem>
                                         {animals.map((animal) => (
@@ -135,7 +135,7 @@ export default function Feedings({
                                         <SelectValue placeholder="All feed types" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">
+                                        <SelectItem value="all">
                                             All feed types
                                         </SelectItem>
                                         {feed_types.map((feed_type) => (

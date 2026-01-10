@@ -31,8 +31,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface HealthRecord {
     id: number;
-    diagnosis: string;
-    treatment: string;
+    type: string;
+    description: string;
     date: string;
     animal: {
         name: string;
@@ -97,7 +97,7 @@ export default function Health({ health_records, animals, filters }: Props) {
                                         <SelectValue placeholder="All animals" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">
+                                        <SelectItem value="all">
                                             All animals
                                         </SelectItem>
                                         {animals.map((animal) => (
@@ -152,12 +152,12 @@ export default function Health({ health_records, animals, filters }: Props) {
                                         {record.date}
                                     </p>
                                     <p>
-                                        <strong>Diagnosis:</strong>{' '}
-                                        {record.diagnosis}
+                                        <strong>Type:</strong>{' '}
+                                        {record.type}
                                     </p>
                                     <p>
-                                        <strong>Treatment:</strong>{' '}
-                                        {record.treatment}
+                                        <strong>Description:</strong>{' '}
+                                        {record.description}
                                     </p>
                                 </div>
                             ))}

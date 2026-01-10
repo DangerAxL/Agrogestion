@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AnimalsExport;
+use App\Exports\SuppliesExport;
 use App\Models\Animal;
 use App\Models\Feeding;
 use App\Models\HealthRecord;
 use App\Models\Lot;
 use App\Models\Supply;
 use App\Models\Weighing;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -28,13 +32,23 @@ class ReportController extends Controller
     {
         $query = Animal::with(['lot', 'breed']);
 
-        if ($request->has('lot_id') && $request->lot_id) {
+        if ($request->has('lot_id') && $request->lot_id && $request->lot_id !== 'all') {
             $query->where('lot_id', $request->lot_id);
         }
 
         $animals = $query->get();
 
         $lots = Lot::all();
+
+        if ($request->has('export') && $request->export === 'pdf') {
+            $pdf = Pdf::loadView('reports.animals', compact('animals'));
+
+            return $pdf->download('animals_report.pdf');
+        }
+
+        if ($request->has('export') && $request->export === 'excel') {
+            return Excel::download(new AnimalsExport($animals), 'animals_report.xlsx');
+        }
 
         return Inertia::render('livestock/Reports/Animals', [
             'animals' => $animals,
@@ -78,7 +92,15 @@ class ReportController extends Controller
      */
     public function feedings(Request $request)
     {
-        $query = Feeding::with(['animal', 'lot']);
+        $query = Feeding::with(['animal', 'feed_type']);
+
+        if ($request->has('animal_id') && $request->animal_id && $request->animal_id !== 'all') {
+            $query->where('animal_id', $request->animal_id);
+        }
+
+        if ($request->has('feed_type_id') && $request->feed_type_id && $request->feed_type_id !== 'all') {
+            $query->where('feed_type_id', $request->feed_type_id);
+        }
 
         if ($request->has('date_from') && $request->date_from) {
             $query->where('date', '>=', $request->date_from);
@@ -90,9 +112,14 @@ class ReportController extends Controller
 
         $feedings = $query->orderBy('date')->get();
 
+        $animals = Animal::all();
+        $feed_types = \App\Models\FeedType::all();
+
         return Inertia::render('livestock/Reports/Feedings', [
             'feedings' => $feedings,
-            'filters' => $request->only(['date_from', 'date_to']),
+            'animals' => $animals,
+            'feed_types' => $feed_types,
+            'filters' => $request->only(['animal_id', 'feed_type_id', 'date_from', 'date_to']),
         ]);
     }
 
@@ -103,8 +130,8 @@ class ReportController extends Controller
     {
         $query = HealthRecord::with(['animal.lot']);
 
-        if ($request->has('type') && $request->type) {
-            $query->where('type', $request->type);
+        if ($request->has('animal_id') && $request->animal_id && $request->animal_id !== 'all') {
+            $query->where('animal_id', $request->animal_id);
         }
 
         if ($request->has('date_from') && $request->date_from) {
@@ -117,18 +144,31 @@ class ReportController extends Controller
 
         $healthRecords = $query->orderBy('date')->get();
 
+        $animals = Animal::all();
+
         return Inertia::render('livestock/Reports/Health', [
-            'healthRecords' => $healthRecords,
-            'filters' => $request->only(['type', 'date_from', 'date_to']),
+            'health_records' => $healthRecords,
+            'animals' => $animals,
+            'filters' => $request->only(['animal_id', 'date_from', 'date_to']),
         ]);
     }
 
     /**
      * Generate and display supply inventory report.
      */
-    public function supplies()
+    public function supplies(Request $request)
     {
         $supplies = Supply::all();
+
+        if ($request->has('export') && $request->export === 'pdf') {
+            $pdf = Pdf::loadView('reports.supplies', compact('supplies'));
+
+            return $pdf->download('supplies_report.pdf');
+        }
+
+        if ($request->has('export') && $request->export === 'excel') {
+            return Excel::download(new SuppliesExport($supplies), 'supplies_report.xlsx');
+        }
 
         return Inertia::render('livestock/Reports/Supplies', [
             'supplies' => $supplies,

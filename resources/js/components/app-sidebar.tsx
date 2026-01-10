@@ -11,9 +11,19 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as animalsIndex } from '@/routes/animals';
+import { index as lotsIndex } from '@/routes/lots';
+import { index as breedsIndex } from '@/routes/breeds';
+import { index as feedTypesIndex } from '@/routes/feed-types';
+import { index as suppliesIndex } from '@/routes/supplies';
+import { index as weighingsIndex } from '@/routes/weighings';
+import { index as feedingsIndex } from '@/routes/feedings';
+import { index as healthRecordsIndex } from '@/routes/health-records';
+import { index as reportsIndex } from '@/routes/reports';
+import { index as usersIndex } from '@/routes/users';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Beef, MapPin, Tags, Wheat, Package, Scale, Utensils, Stethoscope, BarChart3, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -22,24 +32,65 @@ const mainNavItems: NavItem[] = [
         href: dashboard(),
         icon: LayoutGrid,
     },
+    {
+        title: 'Animales',
+        href: animalsIndex.url(),
+        icon: Beef,
+    },
+    {
+        title: 'Lotes',
+        href: lotsIndex.url(),
+        icon: MapPin,
+    },
+    {
+        title: 'Razas',
+        href: breedsIndex.url(),
+        icon: Tags,
+    },
+    {
+        title: 'Tipos de Alimento',
+        href: feedTypesIndex.url(),
+        icon: Wheat,
+    },
+    {
+        title: 'Suministros',
+        href: suppliesIndex.url(),
+        icon: Package,
+    },
+    {
+        title: 'Pesajes',
+        href: weighingsIndex.url(),
+        icon: Scale,
+    },
+    {
+        title: 'Alimentaciones',
+        href: feedingsIndex.url(),
+        icon: Utensils,
+    },
+    {
+        title: 'Registros de Salud',
+        href: healthRecordsIndex.url(),
+        icon: Stethoscope,
+    },
+    {
+        title: 'Reportes',
+        href: reportsIndex.url(),
+        icon: BarChart3,
+    },
+    {
+        title: 'Usuarios',
+        href: usersIndex.url(),
+        icon: Users,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
+
 ];
 
 export function AppSidebar() {
     return (
-        <Sidebar collapsible="icon" variant="inset">
+        <Sidebar collapsible="icon" variant="inset" className="bg-pacific-blue-50 border-pacific-blue-200">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>

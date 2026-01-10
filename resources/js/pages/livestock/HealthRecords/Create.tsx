@@ -34,11 +34,17 @@ interface Animal {
     name: string;
 }
 
-interface Props {
-    animals: Animal[];
+interface User {
+    id: number;
+    name: string;
 }
 
-export default function Crear({ animals }: Props) {
+interface Props {
+    animals: Animal[];
+    veterinarians: User[];
+}
+
+export default function Crear({ animals, veterinarians }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Crear Health Record" />
@@ -99,10 +105,22 @@ export default function Crear({ animals }: Props) {
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="veterinarian">
-                                    Veterinarian
-                                </Label>
-                                <Input id="veterinarian" name="veterinarian" />
+                                <Label htmlFor="veterinarian_id">Veterinarian</Label>
+                                <Select name="veterinarian_id" required>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select veterinarian" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {veterinarians.map((veterinarian) => (
+                                            <SelectItem
+                                                key={veterinarian.id}
+                                                value={veterinarian.id.toString()}
+                                            >
+                                                {veterinarian.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
                             </div>
                             <div>
                                 <Label htmlFor="cost">Cost</Label>
@@ -112,6 +130,27 @@ export default function Crear({ animals }: Props) {
                                     type="number"
                                     step="0.01"
                                 />
+                            </div>
+                            <div>
+                                <Label htmlFor="withdrawal_days">Withdrawal Days</Label>
+                                <Input
+                                    id="withdrawal_days"
+                                    name="withdrawal_days"
+                                    type="number"
+                                    min="0"
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="release_date">Release Date</Label>
+                                <Input
+                                    id="release_date"
+                                    name="release_date"
+                                    type="date"
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="observations">Observations</Label>
+                                <Input id="observations" name="observations" />
                             </div>
                             <Button type="submit">Crear Health Record</Button>
                         </Form>

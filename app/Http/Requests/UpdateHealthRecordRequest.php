@@ -15,12 +15,13 @@ class UpdateHealthRecordRequest extends FormRequest
     {
         return [
             'animal_id' => 'sometimes|required|exists:animals,id',
-            'disease' => 'sometimes|required|string|max:100',
-            'treatment' => 'nullable|string',
+            'type' => 'sometimes|required|string|max:100',
+            'description' => 'nullable|string',
             'date' => 'sometimes|required|date',
             'veterinarian_id' => 'sometimes|required|exists:users,id',
-            'withdrawal_days' => 'sometimes|required|integer|min:0',
-            'release_date' => 'sometimes|required|date|after:date',
+            'cost' => 'nullable|numeric|min:0',
+            'withdrawal_days' => 'nullable|integer|min:0',
+            'release_date' => 'nullable|date|after:date',
             'observations' => 'nullable|string',
         ];
     }

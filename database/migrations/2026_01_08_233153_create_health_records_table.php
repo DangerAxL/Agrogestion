@@ -14,12 +14,13 @@ return new class extends Migration
         Schema::create('health_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('animal_id')->constrained('animals')->cascadeOnDelete();
-            $table->string('disease', 100);
-            $table->text('treatment')->nullable();
+            $table->string('type', 100);
+            $table->text('description')->nullable();
             $table->date('date');
             $table->foreignId('veterinarian_id')->constrained('users');
-            $table->integer('withdrawal_days');
-            $table->date('release_date');
+            $table->decimal('cost', 10, 2)->nullable();
+            $table->integer('withdrawal_days')->nullable();
+            $table->date('release_date')->nullable();
             $table->text('observations')->nullable();
             $table->timestamps();
         });

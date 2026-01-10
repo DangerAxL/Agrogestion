@@ -29,7 +29,9 @@ interface HealthRecord {
     type: string;
     description: string;
     date: string;
-    veterinarian?: string;
+    veterinarian?: {
+        name: string;
+    };
     cost?: number;
 }
 
@@ -84,7 +86,7 @@ export default function Mostrar({ healthRecord }: Props) {
                         </div>
                         <div>
                             <strong>Veterinarian:</strong>{' '}
-                            {healthRecord.veterinarian || 'N/A'}
+                            {healthRecord.veterinarian?.name || 'N/A'}
                         </div>
                         <div>
                             <strong>Cost:</strong> ${healthRecord.cost || 0}

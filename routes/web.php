@@ -1,18 +1,34 @@
 <?php
 
+use App\Models\Animal;
+use App\Models\Feeding;
+use App\Models\Weighing;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return Inertia::render('welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
-    ]);
+    return redirect('/login');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        $totalAnimals = Animal::count();
+        $activeAnimals = Animal::where('status', 'active')->count();
+        $averageWeight = Weighing::avg('weight') ?? 0;
+        $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('quantity') ?? 0;
+        $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('quantity') ?? 0;
+        $efficiency = $totalAnimals > 0 ? ($totalFeedingsThisMonth / $totalAnimals) : 0;
+
+        return Inertia::render('dashboard', [
+            'stats' => [
+                'totalAnimals' => $totalAnimals,
+                'activeAnimals' => $activeAnimals,
+                'averageWeight' => round($averageWeight, 2),
+                'feedingsThisWeek' => $totalFeedingsThisWeek,
+                'feedingsThisMonth' => $totalFeedingsThisMonth,
+                'efficiency' => round($efficiency, 2),
+            ],
+        ]);
     })->name('dashboard');
 
     // Livestock resource routes
@@ -24,6 +40,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('supplies', \App\Http\Controllers\SupplyController::class);
     Route::resource('breeds', \App\Http\Controllers\BreedController::class);
     Route::resource('feed-types', \App\Http\Controllers\FeedTypeController::class);
+    Route::resource('users', \App\Http\Controllers\UserController::class);
 
     // Reports routes
     Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');

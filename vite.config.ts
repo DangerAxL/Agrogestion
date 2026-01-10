@@ -21,6 +21,11 @@ export default defineConfig({
             formVariants: true,
         }),
     ],
+    server: {
+        watch: {
+            ignored: ['**/vendor/**'],
+        },
+    },
     esbuild: {
         jsx: 'automatic',
     },

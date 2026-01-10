@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HealthRecord extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'animal_id',
-        'disease',
-        'treatment',
+        'type',
+        'description',
         'date',
         'veterinarian_id',
+        'cost',
         'withdrawal_days',
         'release_date',
         'observations',
@@ -21,6 +25,7 @@ class HealthRecord extends Model
     protected $casts = [
         'date' => 'date',
         'release_date' => 'date',
+        'cost' => 'decimal:2',
         'withdrawal_days' => 'integer',
     ];
 

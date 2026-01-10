@@ -6,6 +6,7 @@ use App\Http\Requests\StoreHealthRecordRequest;
 use App\Http\Requests\UpdateHealthRecordRequest;
 use App\Models\Animal;
 use App\Models\HealthRecord;
+use App\Models\User;
 use Inertia\Inertia;
 
 class HealthRecordController extends Controller
@@ -32,9 +33,11 @@ class HealthRecordController extends Controller
         $this->authorize('create', HealthRecord::class);
 
         $animals = Animal::all();
+        $veterinarians = User::role('VETERINARIO')->get();
 
         return Inertia::render('livestock/HealthRecords/Create', [
             'animals' => $animals,
+            'veterinarians' => $veterinarians,
         ]);
     }
 
@@ -55,7 +58,7 @@ class HealthRecordController extends Controller
     {
         $this->authorize('view', $healthRecord);
 
-        $healthRecord->load('animal');
+        $healthRecord->load('animal', 'veterinarian');
 
         return Inertia::render('livestock/HealthRecords/Show', [
             'healthRecord' => $healthRecord,
@@ -70,10 +73,12 @@ class HealthRecordController extends Controller
         $this->authorize('update', $healthRecord);
 
         $animals = Animal::all();
+        $veterinarians = User::role('VETERINARIO')->get();
 
         return Inertia::render('livestock/HealthRecords/Edit', [
             'healthRecord' => $healthRecord,
             'animals' => $animals,
+            'veterinarians' => $veterinarians,
         ]);
     }
 

@@ -16,7 +16,7 @@ class FeedingController extends Controller
      */
     public function index()
     {
-        $feedings = Feeding::with(['animal', 'lot'])->paginate(15);
+        $feedings = Feeding::with(['lot', 'feedType'])->paginate(15);
 
         return Inertia::render('livestock/Feedings/Index', [
             'feedings' => $feedings,
@@ -54,7 +54,7 @@ class FeedingController extends Controller
      */
     public function show(Feeding $feeding)
     {
-        $feeding->load(['animal', 'lot']);
+        $feeding->load(['lot', 'feedType']);
 
         return Inertia::render('livestock/Feedings/Show', [
             'feeding' => $feeding,
@@ -66,6 +66,7 @@ class FeedingController extends Controller
      */
     public function edit(Feeding $feeding)
     {
+        $feeding->load(['lot', 'feedType']);
         $animals = Animal::all();
         $lots = Lot::all();
         $feedTypes = \App\Models\FeedType::all();
