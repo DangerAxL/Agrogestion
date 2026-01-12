@@ -48,11 +48,35 @@ class DocumentationController extends Controller
         $file = $request->file('document');
         $path = $file->store('documents');
 
-        return redirect()->route('documentation.index')->with('success', __('Document uploaded successfully.'));
+        return redirect()->route('documentation.index')->with('success', __('Documento subido exitosamente.'));
     }
 
     /**
-     * Download the specified document.
+     * Show the form for editing the specified document.
+     */
+    public function edit(string $filename)
+    {
+        $path = 'documents/'.$filename;
+
+        if (! Storage::exists($path)) {
+            abort(404);
+        }
+
+        $document = [
+            'id' => $filename,
+            'name' => basename($path),
+            'path' => $path,
+            'size' => Storage::size($path),
+            'last_modified' => Storage::lastModified($path),
+        ];
+
+        return Inertia::render('livestock/Documentation/Edit', [
+            'document' => $document,
+        ]);
+    }
+
+    /**
+     * Show the specified document info or download if requested.
      */
     public function show(string $filename)
     {
@@ -62,7 +86,23 @@ class DocumentationController extends Controller
             abort(404);
         }
 
-        return Storage::download($path);
+        // If it's an AJAX or API request, or has download parameter, download the file
+        if (request()->wantsJson() || request()->has('download')) {
+            return Storage::download($path);
+        }
+
+        // Otherwise, show the document info page
+        $document = [
+            'id' => $filename,
+            'name' => basename($path),
+            'path' => $path,
+            'size' => Storage::size($path),
+            'last_modified' => Storage::lastModified($path),
+        ];
+
+        return Inertia::render('livestock/Documentation/Show', [
+            'document' => $document,
+        ]);
     }
 
     /**

@@ -76,8 +76,9 @@ El sistema abarca las siguientes áreas principales de funcionalidad:
 - Laravel Framework Documentation (v12.46.0)
 - Inertia.js Documentation (v2.0.18)
 - React Documentation (v19.2.3)
-- Tailwind CSS Documentation (v4.1.18)
+- Tailwind CSS Documentation (v4.0.0)
 - Pest Testing Framework Documentation (v4.3.1)
+- dom-to-image-more Documentation (v3.7.2)
 
 #### Referencias del Dominio
 - Manual de Buenas Prácticas Ganaderas (SENASA)
@@ -98,8 +99,9 @@ El sistema se integra con bases de datos relacionales (SQLite para desarrollo, M
 - **Frontend**: React 19.2.3 con Inertia.js 2.0.18 para navegación SPA
 - **Backend**: Laravel 12.46.0 con PHP 8.4.1
 - **Base de Datos**: ORM Eloquent con soporte para múltiples motores
-- **Estilos**: Tailwind CSS 4.1.18 con tema claro/oscuro
-- **Autenticación**: Laravel Fortify con soporte para 2FA
+- **Estilos**: Tailwind CSS 4.0.0 con configuración @theme y tema claro/oscuro
+- **Generación de Imágenes**: dom-to-image-more 3.7.2 para exportación de gráficos
+- **Autenticación**: Laravel Fortify con soporte para 2FA y correcciones de compatibilidad
 - **Autorización**: Sistema de roles y permisos basado en políticas
 
 ### 2.2 Funciones del Producto
@@ -687,9 +689,10 @@ CREATE TABLE model_has_roles (
 - **Backend**: Laravel 12.46.0, PHP 8.4.1
 - **Frontend**: React 19.2.3, Inertia.js 2.0.18
 - **Base de Datos**: SQLite (desarrollo), MySQL/PostgreSQL (producción)
-- **Estilos**: Tailwind CSS 4.1.18
+- **Estilos**: Tailwind CSS 4.0.0 con configuración @theme
+- **Generación de Imágenes**: dom-to-image-more 3.7.2
 - **Testing**: Pest 4.3.1, PHPUnit 12.5.4
-- **Autenticación**: Laravel Fortify 1.33.0
+- **Autenticación**: Laravel Fortify 1.33.0 con correcciones de compatibilidad
 - **Autorización**: Laravel Policies
 - **API**: RESTful con Inertia.js
 
@@ -708,7 +711,9 @@ CREATE TABLE model_has_roles (
 
 | Versión | Fecha | Autor | Descripción |
 |---------|-------|-------|-------------|
-| 1.0 | Enero 2026 | Equipo de Desarrollo | Versión inicial del documento |
+| 2.1 | Enero 2026 | Equipo de Desarrollo | Actualización con correcciones: reemplazo html2canvas por dom-to-image-more, configuración Tailwind CSS v4, correcciones en autenticación 2FA |
+| 2.0 | Enero 2026 | Equipo de Desarrollo | Migración a Laravel 12 + React 19 + Tailwind CSS 4 |
+| 1.0 | Enero 2025 | Equipo de Desarrollo | Versión inicial del documento |
 
 ---
 

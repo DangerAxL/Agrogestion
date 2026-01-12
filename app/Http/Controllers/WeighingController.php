@@ -15,7 +15,12 @@ class WeighingController extends Controller
      */
     public function index()
     {
-        $weighings = Weighing::with('animal')->paginate(15);
+        try {
+            $weighings = Weighing::with('animal')->paginate(15);
+        } catch (\Exception $e) {
+            \Log::error('Error loading weighings', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/Weighings/Index', [
             'weighings' => $weighings,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBreedRequest;
 use App\Http\Requests\UpdateBreedRequest;
 use App\Models\Breed;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BreedController extends Controller
@@ -14,7 +15,14 @@ class BreedController extends Controller
      */
     public function index()
     {
-        $breeds = Breed::withCount('animals')->paginate(15);
+        try {
+            Log::info('BreedController index called');
+            $breeds = Breed::withCount('animals')->paginate(15);
+            Log::info('Breeds loaded successfully', ['count' => $breeds->count()]);
+        } catch (\Exception $e) {
+            Log::error('Error loading breeds', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/Breeds/Index', [
             'breeds' => $breeds,

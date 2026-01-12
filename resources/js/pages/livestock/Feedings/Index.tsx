@@ -2,21 +2,22 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
 import { create, edit, index, show } from '@/routes/feedings';
-import { dashboard } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard.url(),
+        title: 'Livestock',
+        href: '/livestock',
     },
     {
         title: 'Feedings',
         href: index().url,
     },
 ];
+
+console.log('Feedings Index breadcrumbs:', breadcrumbs);
 
 interface Feeding {
     id: number;
@@ -77,8 +78,8 @@ export default function Index({ feedings }: Props) {
                                             {feeding.ration_kg} kg
                                         </h3>
                                         <p className="text-sm text-muted-foreground">
-                                            {feeding.lot?.name}{' '}
-                                            • {feeding.date} • Total: {feeding.total_ration} kg
+                                            {feeding.lot?.name} • {feeding.date}{' '}
+                                            • Total: {feeding.total_ration} kg
                                         </p>
                                     </div>
                                     <div className="flex gap-2">

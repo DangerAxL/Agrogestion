@@ -1,9 +1,27 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import {
+    animals,
+    breeds,
+    feedings,
+    index,
+    lots,
+    supplies,
+    weighings,
+} from '@/routes/reports';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
-import { BarChart3, FileText, Heart, Scale, Truck, Users } from 'lucide-react';
+import {
+    BarChart3,
+    FileText,
+    Heart,
+    MapPin,
+    PawPrint,
+    Scale,
+    Truck,
+    Users,
+} from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,7 +30,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
     {
         title: 'Reports',
-        href: '/reports',
+        href: index().url,
     },
 ];
 
@@ -20,20 +38,32 @@ export default function Index() {
     const reports = [
         {
             title: 'Animals Report',
-            description: 'Ver inventory of all animals with filters',
-            href: '/reports/animals',
+            description: 'View inventory of all animals with filters',
+            href: animals().url,
             icon: Users,
+        },
+        {
+            title: 'Breeds Report',
+            description: 'Breeds distribution by lot with stage filters',
+            href: breeds().url,
+            icon: PawPrint,
+        },
+        {
+            title: 'Lots Report',
+            description: 'Lot statistics and animal counts',
+            href: lots().url,
+            icon: MapPin,
         },
         {
             title: 'Weighings Report',
             description: 'Track animal weight changes over time',
-            href: '/reports/weighings',
+            href: weighings().url,
             icon: Scale,
         },
         {
             title: 'Feedings Report',
-            description: 'Monitor feeding activities and schedules',
-            href: '/reports/feedings',
+            description: 'Monitor feeding activities and weight gains',
+            href: feedings().url,
             icon: BarChart3,
         },
         {
@@ -45,7 +75,7 @@ export default function Index() {
         {
             title: 'Supplies Report',
             description: 'Inventory status of supplies',
-            href: '/reports/supplies',
+            href: supplies().url,
             icon: Truck,
         },
     ];
@@ -81,7 +111,7 @@ export default function Index() {
                                 <Button asChild className="w-full">
                                     <Link href={report.href}>
                                         <FileText className="mr-2 h-4 w-4" />
-                                        Ver Report
+                                        View Report
                                     </Link>
                                 </Button>
                             </CardContent>

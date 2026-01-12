@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSupplyRequest;
 use App\Http\Requests\UpdateSupplyRequest;
 use App\Models\Supply;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class SupplyController extends Controller
@@ -14,7 +15,14 @@ class SupplyController extends Controller
      */
     public function index()
     {
-        $supplies = Supply::paginate(15);
+        try {
+            Log::info('SupplyController index called');
+            $supplies = Supply::paginate(15);
+            Log::info('Supplies loaded successfully', ['count' => $supplies->count()]);
+        } catch (\Exception $e) {
+            Log::error('Error loading supplies', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/Supplies/Index', [
             'supplies' => $supplies,

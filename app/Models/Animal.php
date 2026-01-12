@@ -46,9 +46,19 @@ class Animal extends Model
         return $this->hasMany(Weighing::class);
     }
 
-    public function healthRecords(): HasMany
+    public function medicalHistories(): HasMany
     {
-        return $this->hasMany(HealthRecord::class);
+        return $this->hasMany(MedicalHistory::class);
+    }
+
+    public function veterinaryTreatments(): HasMany
+    {
+        return $this->hasMany(VeterinaryTreatment::class);
+    }
+
+    public function healthAlerts(): HasMany
+    {
+        return $this->hasMany(HealthAlert::class);
     }
 
     public function scopeActive($query)

@@ -66,6 +66,24 @@ class PermissionSeeder extends Seeder
             // Reports
             'view reports',
 
+            // Medical Histories
+            'view medical histories',
+            'create medical histories',
+            'edit medical histories',
+            'delete medical histories',
+
+            // Veterinary Treatments
+            'view veterinary treatments',
+            'create veterinary treatments',
+            'edit veterinary treatments',
+            'delete veterinary treatments',
+
+            // Health Alerts
+            'view health alerts',
+            'create health alerts',
+            'edit health alerts',
+            'delete health alerts',
+
             // Users
             'view users',
             'create users',
@@ -93,6 +111,9 @@ class PermissionSeeder extends Seeder
             'view feed types', 'create feed types', 'edit feed types', 'delete feed types',
             'view feedings', 'create feedings', 'edit feedings', 'delete feedings',
             'view reports',
+            'view medical histories', 'create medical histories', 'edit medical histories', 'delete medical histories',
+            'view veterinary treatments', 'create veterinary treatments', 'edit veterinary treatments', 'delete veterinary treatments',
+            'view health alerts', 'create health alerts', 'edit health alerts', 'delete health alerts',
             'view users', 'create users', 'edit users', 'delete users',
         ]);
 
@@ -108,6 +129,9 @@ class PermissionSeeder extends Seeder
             'view feed types',
             'view feedings',
             'view reports',
+            'view medical histories', 'create medical histories', 'edit medical histories', 'delete medical histories',
+            'view veterinary treatments', 'create veterinary treatments', 'edit veterinary treatments', 'delete veterinary treatments',
+            'view health alerts', 'create health alerts', 'edit health alerts', 'delete health alerts',
         ]);
     }
 }

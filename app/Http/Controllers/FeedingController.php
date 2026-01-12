@@ -6,6 +6,7 @@ use App\Http\Requests\StoreFeedingRequest;
 use App\Http\Requests\UpdateFeedingRequest;
 use App\Models\Animal;
 use App\Models\Feeding;
+use App\Models\FeedType;
 use App\Models\Lot;
 use Inertia\Inertia;
 
@@ -16,7 +17,12 @@ class FeedingController extends Controller
      */
     public function index()
     {
-        $feedings = Feeding::with(['lot', 'feedType'])->paginate(15);
+        try {
+            $feedings = Feeding::with(['lot', 'feedType'])->paginate(15);
+        } catch (\Exception $e) {
+            \Log::error('Error loading feedings', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/Feedings/Index', [
             'feedings' => $feedings,
@@ -30,7 +36,7 @@ class FeedingController extends Controller
     {
         $animals = Animal::all();
         $lots = Lot::all();
-        $feedTypes = \App\Models\FeedType::all();
+        $feedTypes = FeedType::all();
 
         return Inertia::render('livestock/Feedings/Create', [
             'animals' => $animals,
@@ -44,7 +50,7 @@ class FeedingController extends Controller
      */
     public function store(StoreFeedingRequest $request)
     {
-        Feeding::create($request->validated());
+        Feeding::create($request->validated() + ['created_by' => auth()->id()]);
 
         return redirect()->route('feedings.index')->with('success', __('Feeding record created successfully.'));
     }
@@ -69,7 +75,7 @@ class FeedingController extends Controller
         $feeding->load(['lot', 'feedType']);
         $animals = Animal::all();
         $lots = Lot::all();
-        $feedTypes = \App\Models\FeedType::all();
+        $feedTypes = FeedType::all();
 
         return Inertia::render('livestock/Feedings/Edit', [
             'feeding' => $feeding,

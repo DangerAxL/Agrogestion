@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreAnimalRequest;
 use App\Http\Requests\UpdateAnimalRequest;
 use App\Models\Animal;
+use App\Models\Breed;
 use App\Models\Lot;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class AnimalController extends Controller
@@ -15,7 +17,14 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        $animals = Animal::with(['lot', 'breed'])->paginate(15);
+        try {
+            Log::info('AnimalController index called');
+            $animals = Animal::with(['lot', 'breed'])->paginate(15);
+            Log::info('Animals loaded successfully', ['count' => $animals->count()]);
+        } catch (\Exception $e) {
+            Log::error('Error loading animals', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/Animals/Index', [
             'animals' => $animals,
@@ -28,7 +37,7 @@ class AnimalController extends Controller
     public function create()
     {
         $lots = Lot::all();
-        $breeds = \App\Models\Breed::all();
+        $breeds = Breed::all();
 
         return Inertia::render('livestock/Animals/Create', [
             'lots' => $lots,
@@ -51,7 +60,7 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        $animal->load(['lot', 'breed', 'weighings', 'healthRecords', 'feedings']);
+        $animal->load(['lot', 'breed', 'weighings', 'feedings']);
 
         return Inertia::render('livestock/Animals/Show', [
             'animal' => $animal,
@@ -64,7 +73,7 @@ class AnimalController extends Controller
     public function edit(Animal $animal)
     {
         $lots = Lot::all();
-        $breeds = \App\Models\Breed::all();
+        $breeds = Breed::all();
 
         return Inertia::render('livestock/Animals/Edit', [
             'animal' => $animal,

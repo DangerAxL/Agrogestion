@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreFeedTypeRequest;
 use App\Http\Requests\UpdateFeedTypeRequest;
 use App\Models\FeedType;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class FeedTypeController extends Controller
@@ -14,7 +15,14 @@ class FeedTypeController extends Controller
      */
     public function index()
     {
-        $feedTypes = FeedType::paginate(15);
+        try {
+            Log::info('FeedTypeController index called');
+            $feedTypes = FeedType::paginate(15);
+            Log::info('FeedTypes loaded successfully', ['count' => $feedTypes->count()]);
+        } catch (\Exception $e) {
+            Log::error('Error loading feed types', ['error' => $e->getMessage()]);
+            throw $e;
+        }
 
         return Inertia::render('livestock/FeedTypes/Index', [
             'feedTypes' => $feedTypes,

@@ -8,14 +8,16 @@ import { Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Ganadería',
+        title: 'Livestock',
         href: '/livestock',
     },
     {
-        title: 'Suministros',
+        title: 'Supplies',
         href: index().url,
     },
 ];
+
+console.log('Supplies Index breadcrumbs:', breadcrumbs);
 
 interface Supply {
     id: number;
@@ -41,25 +43,25 @@ interface Props {
 export default function Index({ supplies }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Suministros" />
+            <Head title="Supplies" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Suministros</h1>
+                        <h1 className="text-2xl font-bold">Supplies</h1>
                         <p className="text-muted-foreground">
-                            Gestiona tus suministros de ganado
+                            Manage your livestock supplies
                         </p>
                     </div>
                     <Button asChild>
                         <Link href={create().url}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Agregar Suministro
+                            Add Supply
                         </Link>
                     </Button>
                 </div>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Lista de Suministros</CardTitle>
+                        <CardTitle>Supplies List</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
@@ -85,7 +87,7 @@ export default function Index({ supplies }: Props) {
                                             asChild
                                         >
                                             <Link href={show(supply.id).url}>
-                                                Ver
+                                                View
                                             </Link>
                                         </Button>
                                         <Button
@@ -94,7 +96,7 @@ export default function Index({ supplies }: Props) {
                                             asChild
                                         >
                                             <Link href={edit(supply.id).url}>
-                                                Editar
+                                                Edit
                                             </Link>
                                         </Button>
                                     </div>

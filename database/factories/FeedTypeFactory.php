@@ -17,7 +17,7 @@ class FeedTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->randomElement(['Maíz', 'Sorgo', 'Soja', 'Cebada', 'Trigo', 'Concentrado']),
+            'name' => $this->faker->randomElement(['Maíz', 'Sorgo', 'Soja', 'Cebada', 'Trigo', 'Concentrado']),
             'composition' => $this->faker->sentence(),
         ];
     }

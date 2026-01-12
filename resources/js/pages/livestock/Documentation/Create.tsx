@@ -3,18 +3,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
+import { index, store } from '@/routes/documentation';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Livestock',
+        title: 'Ganadería',
         href: '/livestock',
     },
     {
-        title: 'Documentation',
-        href: '/documentation',
+        title: 'Documentación',
+        href: index().url,
     },
     {
         title: 'Crear',
@@ -30,55 +31,46 @@ export default function Crear() {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <Button variant="outline" size="sm" asChild>
-                            <a href="/documentation">
+                            <a href={index().url}>
                                 <ArrowLeft className="mr-2 h-4 w-4" />
-                                Atrás to Documentation
+                                Volver a Documentación
                             </a>
                         </Button>
                         <div>
                             <h1 className="text-2xl font-bold">
-                                Crear Document
+                                Subir Documento
                             </h1>
                             <p className="text-muted-foreground">
-                                Add a new document
+                                Sube un nuevo documento al sistema
                             </p>
                         </div>
                     </div>
                 </div>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Document Details</CardTitle>
+                        <CardTitle>Seleccionar Documento</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <Form
-                            action="/documentation"
+                            action={store().url}
                             method="post"
+                            encType="multipart/form-data"
                             className="space-y-4"
                         >
                             <div>
-                                <Label htmlFor="title">Title</Label>
-                                <Input id="title" name="title" required />
-                            </div>
-                            <div>
-                                <Label htmlFor="description">Description</Label>
-                                <textarea
-                                    id="description"
-                                    name="description"
-                                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                                <Label htmlFor="document">Documento</Label>
+                                <Input
+                                    id="document"
+                                    name="document"
+                                    type="file"
+                                    accept=".pdf,.doc,.docx,.txt"
                                     required
                                 />
+                                <p className="text-sm text-muted-foreground">
+                                    Selecciona un archivo PDF, DOC, DOCX o TXT (máximo 10MB)
+                                </p>
                             </div>
-                            <div>
-                                <Label htmlFor="content">Content</Label>
-                                <textarea
-                                    id="content"
-                                    name="content"
-                                    rows={10}
-                                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                    required
-                                />
-                            </div>
-                            <Button type="submit">Crear Document</Button>
+                            <Button type="submit">Subir Documento</Button>
                         </Form>
                     </CardContent>
                 </Card>

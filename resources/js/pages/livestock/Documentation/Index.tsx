@@ -1,18 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import { create, index, show } from '@/routes/documentation';
 import { type BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { FileText, Plus } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Livestock',
+        title: 'Ganadería',
         href: '/livestock',
     },
     {
-        title: 'Documentation',
-        href: '/documentation',
+        title: 'Documentación',
+        href: index().url,
     },
 ];
 
@@ -40,9 +41,9 @@ export default function Index({ documents }: Props) {
                         </p>
                     </div>
                     <Button asChild>
-                        <Link href="/documentation/create">
+                        <Link href={create().url}>
                             <Plus className="mr-2 h-4 w-4" />
-                            Add Document
+                            Agregar Documento
                         </Link>
                     </Button>
                 </div>
@@ -72,7 +73,7 @@ export default function Index({ documents }: Props) {
                                     asChild
                                 >
                                     <Link
-                                        href={`/documentation/${document.id}`}
+                                        href={show(document.id).url}
                                     >
                                         Ver
                                     </Link>

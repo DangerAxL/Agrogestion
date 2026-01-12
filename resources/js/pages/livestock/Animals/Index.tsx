@@ -19,7 +19,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 interface Animal {
     id: number;
-    name: string;
+    caravana: string;
     breed?: {
         name: string;
     };
@@ -72,7 +72,7 @@ export default function Index({ animals }: Props) {
                                 >
                                     <div>
                                         <h3 className="font-semibold">
-                                            {animal.name}
+                                            {animal.caravana}
                                         </h3>
                                         <p className="text-sm text-muted-foreground">
                                             {animal.breed?.name} •{' '}
@@ -86,7 +86,7 @@ export default function Index({ animals }: Props) {
                                             asChild
                                         >
                                             <Link href={show(animal.id).url}>
-                                                Ver
+                                                View
                                             </Link>
                                         </Button>
                                         <Button
@@ -95,7 +95,7 @@ export default function Index({ animals }: Props) {
                                             asChild
                                         >
                                             <Link href={edit(animal.id).url}>
-                                                Editar
+                                                Edit
                                             </Link>
                                         </Button>
                                     </div>

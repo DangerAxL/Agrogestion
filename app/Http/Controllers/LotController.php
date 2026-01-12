@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreLotRequest;
 use App\Http\Requests\UpdateLotRequest;
 use App\Models\Lot;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class LotController extends Controller
@@ -14,7 +15,9 @@ class LotController extends Controller
      */
     public function index()
     {
+        Log::info('LotController index called');
         $lots = Lot::withCount('animals')->paginate(15);
+        Log::info('Lots loaded successfully', ['count' => $lots->count()]);
 
         return Inertia::render('livestock/Lots/Index', [
             'lots' => $lots,

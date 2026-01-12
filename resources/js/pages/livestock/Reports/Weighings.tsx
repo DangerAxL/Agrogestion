@@ -90,7 +90,7 @@ export default function Weighings({ weighings, animals, filters }: Props) {
                                 <Label htmlFor="animal_id">Animal</Label>
                                 <Select
                                     name="animal_id"
-                                    defaultValue={filters.animal_id}
+                                    defaultValue={filters.animal_id || "all"}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="All animals" />

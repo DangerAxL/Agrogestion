@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
     {
-        title: 'Crear',
+        title: 'Create',
         href: '#',
     },
 ];
@@ -47,11 +47,11 @@ interface Props {
 export default function Crear({ lots, breeds }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Animal" />
+            <Head title="Create Animal" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Crear Animal</h1>
+                        <h1 className="text-2xl font-bold">Create Animal</h1>
                         <p className="text-muted-foreground">
                             Add a new animal to your livestock
                         </p>
@@ -68,8 +68,8 @@ export default function Crear({ lots, breeds }: Props) {
                             className="space-y-4"
                         >
                             <div>
-                                <Label htmlFor="name">Name</Label>
-                                <Input id="name" name="name" required />
+                                <Label htmlFor="caravana">Caravana</Label>
+                                <Input id="caravana" name="caravana" required />
                             </div>
                             <div>
                                 <Label htmlFor="gender">Gender</Label>
@@ -135,7 +135,7 @@ export default function Crear({ lots, breeds }: Props) {
                                 <Label htmlFor="status">Status</Label>
                                 <Input id="status" name="status" />
                             </div>
-                            <Button type="submit">Crear Animal</Button>
+                            <Button type="submit">Create Animal</Button>
                         </Form>
                     </CardContent>
                 </Card>

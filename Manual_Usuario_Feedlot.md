@@ -1,9 +1,9 @@
 # Manual de Usuario - Sistema de Gestión de Feedlot
 
-**Versión:** 2.0.0
+**Versión:** 2.1.0
 **Fecha:** Enero 2026
 **Sistema:** Feedlot Management System
-**Framework:** Laravel 12 + Inertia.js + React 19 + Tailwind CSS 4
+**Framework:** Laravel 12 + Inertia.js + React 19 + Tailwind CSS 4 + dom-to-image-more
 
 ## Introducción
 
@@ -15,9 +15,9 @@ El Sistema de Gestión de Feedlot es una plataforma integral de gestión ganader
 - **Análisis de Rendimiento**: Métricas avanzadas de ganancia diaria promedio (GDP) y conversión alimentaria
 - **Control Sanitario**: Seguimiento veterinario con alertas automáticas y gestión de tratamientos
 - **Inventarios Inteligentes**: Control de suministros con alertas de stock y rotación FIFO
-- **Reportes Ejecutivos**: Dashboards y reportes exportables para análisis de negocio
-- **Seguridad Avanzada**: Sistema de roles y permisos granulares con autenticación de dos factores
-- **Interfaz Moderna**: Diseño responsive optimizado para dispositivos móviles y desktop
+- **Reportes Ejecutivos**: Dashboards y reportes exportables con generación de imágenes mejorada
+- **Seguridad Avanzada**: Sistema de roles y permisos granulares con autenticación de dos factores corregida
+- **Interfaz Moderna**: Diseño responsive con Tailwind CSS v4 optimizado para dispositivos móviles y desktop
 
 ### Arquitectura Técnica
 
@@ -26,8 +26,9 @@ El sistema está construido sobre una arquitectura moderna de tres capas:
 - **Backend**: Laravel 12 con API RESTful y lógica de negocio robusta
 - **Frontend**: React 19 con Inertia.js para navegación sin recargas
 - **Base de Datos**: SQLite/PostgreSQL con migraciones versionadas
-- **Estilos**: Tailwind CSS 4 con componentes reutilizables
-- **Autenticación**: Laravel Fortify con soporte para 2FA
+- **Estilos**: Tailwind CSS 4 con configuración @theme y componentes reutilizables
+- **Generación de Imágenes**: dom-to-image-more para exportación avanzada de gráficos
+- **Autenticación**: Laravel Fortify con soporte para 2FA y correcciones de compatibilidad
 
 ## Requisitos del Sistema
 
@@ -1180,6 +1181,12 @@ GET    /api/reports/health       # Reporte sanitario
 ## Apéndice D: Versiones y Cambios
 
 ### Historial de Versiones
+
+#### Versión 2.1.0 (Enero 2026)
+- **Correcciones Técnicas**: Reemplazo html2canvas por dom-to-image-more para mejor compatibilidad
+- **Configuración Tailwind**: Actualización a v4.0.0 con @theme directive
+- **Autenticación Mejorada**: Correcciones en controladores 2FA para mayor estabilidad
+- **Generación de Imágenes**: Mejora en exportación de gráficos en reportes
 
 #### Versión 2.0.0 (Enero 2026)
 - **Nueva Arquitectura**: Migración a Laravel 12 + React 19

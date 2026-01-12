@@ -17,15 +17,15 @@ class DatabaseSeeder extends Seeder
 
         // User::factory(10)->create();
 
-        $user = User::firstOrCreate([
-            'email' => 'test@example.com',
+        $productor = User::firstOrCreate([
+            'email' => 'maximiliano@feedlot.com',
         ], [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => bcrypt('password'),
+            'name' => 'Maximiliano Areco',
+            'email' => 'maximiliano@feedlot.com',
+            'password' => bcrypt('maximiliano1'),
         ]);
 
-        $user->assignRole('PRODUCTOR');
+        $productor->assignRole('PRODUCTOR');
 
         $veterinarian = User::firstOrCreate([
             'email' => 'vet@example.com',
@@ -38,13 +38,24 @@ class DatabaseSeeder extends Seeder
         $veterinarian->assignRole('VETERINARIO');
 
         // Create sample data
-        \App\Models\Breed::factory(3)->create();
+        \App\Models\Breed::factory()->createMany([
+            ['name' => 'Angus'],
+            ['name' => 'Hereford'],
+            ['name' => 'Charolais'],
+            ['name' => 'Braford'],
+            ['name' => 'Bonsmara'],
+            ['name' => 'Holando Argentino'],
+        ]);
         \App\Models\Lot::factory(3)->create();
-        \App\Models\FeedType::factory(4)->create();
+        \App\Models\FeedType::factory()->createMany([
+            ['name' => 'Maíz', 'composition' => 'Alto en energía'],
+            ['name' => 'Sorgo', 'composition' => 'Proteína vegetal'],
+            ['name' => 'Soja', 'composition' => 'Alto en proteína'],
+            ['name' => 'Cebada', 'composition' => 'Fibra digestible'],
+        ]);
         \App\Models\Supply::factory(10)->create();
         \App\Models\Animal::factory(50)->create();
         \App\Models\Weighing::factory(100)->create();
-        \App\Models\HealthRecord::factory(30)->create();
         \App\Models\Feeding::factory(60)->create();
     }
 }

@@ -12,7 +12,11 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import FeedingsReportPdf from '@/components/pdf/FeedingsReportPdf';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -61,6 +65,11 @@ interface Props {
         date_from?: string;
         date_to?: string;
     };
+    weightGains: Record<string, {
+        daily: number;
+        monthly: number;
+        semesterly: number;
+    }>;
 }
 
 export default function Feedings({
@@ -68,7 +77,25 @@ export default function Feedings({
     animals,
     feed_types,
     filters,
+    weightGains,
 }: Props) {
+    const [chartType, setChartType] = useState<'bar' | 'pie' | 'line'>('bar');
+
+    // Prepare chart data
+    const chartData = Object.entries(weightGains).map(([feedType, gains]) => ({
+        feedType,
+        daily: gains.daily,
+        monthly: gains.monthly,
+        semesterly: gains.semesterly,
+    }));
+
+    const pieData = Object.entries(weightGains).map(([feedType, gains]) => ({
+        name: feedType,
+        value: gains.daily,
+    }));
+
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Feedings Report" />
@@ -90,6 +117,22 @@ export default function Feedings({
                             </p>
                         </div>
                     </div>
+                    <div className="flex gap-2">
+                        <Button variant="outline" size="sm" asChild>
+                            <a href={`/reports/feedings?${new URLSearchParams(filters as any).toString()}&export=excel`}>
+                                <Download className="mr-2 h-4 w-4" />
+                                Export Excel
+                            </a>
+                        </Button>
+                        <PDFDownloadLink document={<FeedingsReportPdf feedings={feedings} weightGains={weightGains} />} fileName="feedings-report.pdf">
+                            {({ loading }) => (
+                                <Button variant="outline" size="sm" disabled={loading}>
+                                    <Download className="mr-2 h-4 w-4" />
+                                    {loading ? 'Generating PDF...' : 'Export PDF'}
+                                </Button>
+                            )}
+                        </PDFDownloadLink>
+                    </div>
                 </div>
                 <Card>
                     <CardHeader>
@@ -105,7 +148,7 @@ export default function Feedings({
                                 <Label htmlFor="animal_id">Animal</Label>
                                 <Select
                                     name="animal_id"
-                                    defaultValue={filters.animal_id}
+                                    defaultValue={filters.animal_id || "all"}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="All animals" />
@@ -129,7 +172,7 @@ export default function Feedings({
                                 <Label htmlFor="feed_type_id">Feed Type</Label>
                                 <Select
                                     name="feed_type_id"
-                                    defaultValue={filters.feed_type_id}
+                                    defaultValue={filters.feed_type_id || "all"}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="All feed types" />
@@ -192,6 +235,92 @@ export default function Feedings({
                                             {feeding.feed_type.name} •{' '}
                                             {feeding.quantity} kg •{' '}
                                             {feeding.date}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <div className="flex items-center justify-between">
+                            <CardTitle>Weight Gains by Feed Type</CardTitle>
+                            <div className="flex items-center gap-2">
+                                <Label>Chart Type</Label>
+                                <Select value={chartType} onValueChange={(value: 'bar' | 'pie' | 'line') => setChartType(value)}>
+                                    <SelectTrigger className="w-32">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="bar">Bar</SelectItem>
+                                        <SelectItem value="pie">Pie</SelectItem>
+                                        <SelectItem value="line">Line</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div>
+                            {chartType === 'bar' && (
+                                <BarChart width={800} height={400} data={chartData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="feedType" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Bar dataKey="daily" fill="#8884d8" />
+                                    <Bar dataKey="monthly" fill="#82ca9d" />
+                                    <Bar dataKey="semesterly" fill="#ffc658" />
+                                </BarChart>
+                            )}
+                            {chartType === 'pie' && (
+                                <PieChart width={800} height={400}>
+                                    <Pie
+                                        data={pieData}
+                                        cx={400}
+                                        cy={200}
+                                        labelLine={false}
+                                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                                        outerRadius={120}
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                    >
+                                        {pieData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            )}
+                            {chartType === 'line' && (
+                                <LineChart width={800} height={400} data={chartData}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="feedType" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
+                                    <Line type="monotone" dataKey="daily" stroke="#8884d8" />
+                                    <Line type="monotone" dataKey="monthly" stroke="#82ca9d" />
+                                    <Line type="monotone" dataKey="semesterly" stroke="#ffc658" />
+                                </LineChart>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Weight Gains Summary</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-4">
+                            {Object.entries(weightGains).map(([feedType, gains]) => (
+                                <div key={feedType} className="flex items-center justify-between border-b pb-4">
+                                    <div>
+                                        <h3 className="font-semibold">{feedType}</h3>
+                                        <p className="text-sm text-muted-foreground">
+                                            Daily: {gains.daily.toFixed(2)} kg • Monthly: {gains.monthly.toFixed(2)} kg • Semesterly: {gains.semesterly.toFixed(2)} kg
                                         </p>
                                     </div>
                                 </div>

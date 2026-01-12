@@ -22,8 +22,7 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->date('entry_date');
             $table->date('withdrawal_date')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

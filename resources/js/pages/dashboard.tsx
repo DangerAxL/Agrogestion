@@ -12,7 +12,6 @@ import { index as feedTypesIndex } from '@/routes/feed-types';
 import { index as suppliesIndex } from '@/routes/supplies';
 import { index as weighingsIndex } from '@/routes/weighings';
 import { index as feedingsIndex } from '@/routes/feedings';
-import { index as healthRecordsIndex } from '@/routes/health-records';
 import { index as reportsIndex } from '@/routes/reports';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -64,12 +63,6 @@ const modules = [
         description: 'Control de raciones y alimentación',
         url: feedingsIndex.url(),
         icon: '🍽️',
-    },
-    {
-        name: 'Registros de Salud',
-        description: 'Historial veterinario y tratamientos',
-        url: healthRecordsIndex.url(),
-        icon: '🏥',
     },
     {
         name: 'Reportes',

@@ -35,20 +35,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('animals', \App\Http\Controllers\AnimalController::class);
     Route::resource('lots', \App\Http\Controllers\LotController::class);
     Route::resource('weighings', \App\Http\Controllers\WeighingController::class);
-    Route::resource('health-records', \App\Http\Controllers\HealthRecordController::class);
     Route::resource('feedings', \App\Http\Controllers\FeedingController::class);
     Route::resource('supplies', \App\Http\Controllers\SupplyController::class);
     Route::resource('breeds', \App\Http\Controllers\BreedController::class);
     Route::resource('feed-types', \App\Http\Controllers\FeedTypeController::class);
+    Route::resource('medical-histories', \App\Http\Controllers\MedicalHistoryController::class);
+    Route::resource('veterinary-treatments', \App\Http\Controllers\VeterinaryTreatmentController::class);
+    Route::resource('health-alerts', \App\Http\Controllers\HealthAlertController::class);
     Route::resource('users', \App\Http\Controllers\UserController::class);
 
     // Reports routes
     Route::get('reports', [\App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
     Route::get('reports/animals', [\App\Http\Controllers\ReportController::class, 'animals'])->name('reports.animals');
+    Route::get('reports/breeds', [\App\Http\Controllers\ReportController::class, 'breeds'])->name('reports.breeds');
+    Route::get('reports/lots', [\App\Http\Controllers\ReportController::class, 'lots'])->name('reports.lots');
     Route::get('reports/weighings', [\App\Http\Controllers\ReportController::class, 'weighings'])->name('reports.weighings');
     Route::get('reports/feedings', [\App\Http\Controllers\ReportController::class, 'feedings'])->name('reports.feedings');
-    Route::get('reports/health', [\App\Http\Controllers\ReportController::class, 'health'])->name('reports.health');
     Route::get('reports/supplies', [\App\Http\Controllers\ReportController::class, 'supplies'])->name('reports.supplies');
+    Route::get('analytics', function () {
+        return Inertia::render('Analytics/Index');
+    })->name('analytics.index');
 
     // Config routes
     Route::get('config', [\App\Http\Controllers\ConfigController::class, 'index'])->name('config.index');
@@ -56,6 +62,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Documentation routes
     Route::resource('documentation', \App\Http\Controllers\DocumentationController::class);
+
+    // Notification routes
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::patch('/notifications/{notification}/read', [App\Http\Controllers\NotificationController::class, 'markAsRead']);
+    Route::patch('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy']);
 });
 
 require __DIR__.'/settings.php';

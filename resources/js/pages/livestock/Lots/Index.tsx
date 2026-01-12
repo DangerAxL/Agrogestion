@@ -17,6 +17,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+console.log('Lots Index breadcrumbs:', breadcrumbs);
+
 interface Lot {
     id: number;
     name: string;

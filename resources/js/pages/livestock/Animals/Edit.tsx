@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
     {
-        title: 'Editar',
+        title: 'Edit',
         href: '#',
     },
 ];
@@ -41,7 +41,7 @@ interface Breed {
 
 interface Animal {
     id: number;
-    name: string;
+    caravana: string;
     breed_id?: number;
     lot_id?: number;
     gender: 'male' | 'female';
@@ -58,11 +58,11 @@ interface Props {
 export default function Editar({ animal, lots, breeds }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title={`Editar Animal: ${animal.name}`} />
+            <Head title={`Edit Animal: ${animal.caravana}`} />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Editar Animal</h1>
+                        <h1 className="text-2xl font-bold">Edit Animal</h1>
                         <p className="text-muted-foreground">
                             Update animal information
                         </p>
@@ -79,11 +79,11 @@ export default function Editar({ animal, lots, breeds }: Props) {
                             className="space-y-4"
                         >
                             <div>
-                                <Label htmlFor="name">Name</Label>
+                                <Label htmlFor="caravana">Caravana</Label>
                                 <Input
-                                    id="name"
-                                    name="name"
-                                    defaultValue={animal.name}
+                                    id="caravana"
+                                    name="caravana"
+                                    defaultValue={animal.caravana}
                                     required
                                 />
                             </div>
