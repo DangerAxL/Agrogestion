@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVeterinaryTreatmentRequest;
 use App\Http\Requests\UpdateVeterinaryTreatmentRequest;
 use App\Models\Animal;
-use App\Models\TreatmentCatalog;
 use App\Models\VeterinaryTreatment;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
@@ -19,14 +18,14 @@ class VeterinaryTreatmentController extends Controller
     {
         try {
             Log::info('VeterinaryTreatmentController index called');
-            $veterinaryTreatments = VeterinaryTreatment::with(['animal', 'treatmentCatalog'])->paginate(15);
+            $veterinaryTreatments = VeterinaryTreatment::with(['animal'])->paginate(15);
             Log::info('Veterinary treatments loaded successfully', ['count' => $veterinaryTreatments->count()]);
         } catch (\Exception $e) {
             Log::error('Error loading veterinary treatments', ['error' => $e->getMessage()]);
             throw $e;
         }
 
-        return Inertia::render('livestock/VeterinaryTreatments/Index', [
+        return Inertia::render('VeterinaryTreatments/Index', [
             'veterinaryTreatments' => $veterinaryTreatments,
         ]);
     }
@@ -37,11 +36,9 @@ class VeterinaryTreatmentController extends Controller
     public function create()
     {
         $animals = Animal::all();
-        $treatmentCatalogs = TreatmentCatalog::all();
 
-        return Inertia::render('livestock/VeterinaryTreatments/Create', [
+        return Inertia::render('VeterinaryTreatments/Create', [
             'animals' => $animals,
-            'treatmentCatalogs' => $treatmentCatalogs,
         ]);
     }
 
@@ -60,9 +57,9 @@ class VeterinaryTreatmentController extends Controller
      */
     public function show(VeterinaryTreatment $veterinaryTreatment)
     {
-        $veterinaryTreatment->load(['animal', 'treatmentCatalog']);
+        $veterinaryTreatment->load(['animal']);
 
-        return Inertia::render('livestock/VeterinaryTreatments/Show', [
+        return Inertia::render('VeterinaryTreatments/Show', [
             'veterinaryTreatment' => $veterinaryTreatment,
         ]);
     }
@@ -73,12 +70,10 @@ class VeterinaryTreatmentController extends Controller
     public function edit(VeterinaryTreatment $veterinaryTreatment)
     {
         $animals = Animal::all();
-        $treatmentCatalogs = TreatmentCatalog::all();
 
-        return Inertia::render('livestock/VeterinaryTreatments/Edit', [
+        return Inertia::render('VeterinaryTreatments/Edit', [
             'veterinaryTreatment' => $veterinaryTreatment,
             'animals' => $animals,
-            'treatmentCatalogs' => $treatmentCatalogs,
         ]);
     }
 

@@ -61,6 +61,16 @@ class Animal extends Model
         return $this->hasMany(HealthAlert::class);
     }
 
+    public function stages(): HasMany
+    {
+        return $this->hasMany(Stage::class);
+    }
+
+    public function caravanas(): HasMany
+    {
+        return $this->hasMany(Caravana::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', true);

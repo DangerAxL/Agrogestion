@@ -76,6 +76,8 @@ interface Props {
     stats: {
         totalAnimals: number;
         activeAnimals: number;
+        totalLots: number;
+        totalSupplies: number;
         averageWeight: number;
         feedingsThisWeek: number;
         feedingsThisMonth: number;
@@ -94,7 +96,7 @@ export default function Dashboard({ stats }: Props) {
                         <p className="text-muted-foreground">Panel de Control Principal - Gestiona tu ganado de manera eficiente</p>
                     </div>
                 </div>
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-4">
                     <Card className="border-pacific-blue-200 bg-white/90 backdrop-blur-sm aspect-video">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-ash-grey-800 flex items-center space-x-2">
@@ -163,6 +165,26 @@ export default function Dashboard({ stats }: Props) {
                                         {stats.feedingsThisMonth > 0 ? Math.round(stats.feedingsThisMonth / stats.totalAnimals) : 0}
                                     </div>
                                     <div className="text-sm text-ash-grey-600">kg/Alimento por Animal</div>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                    <Card className="border-pacific-blue-200 bg-white/90 backdrop-blur-sm aspect-video">
+                        <CardHeader className="pb-4">
+                            <CardTitle className="text-ash-grey-800 flex items-center space-x-2">
+                                <span className="text-2xl">📊</span>
+                                <span>Estadísticas Generales</span>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="space-y-4">
+                                <div className="flex justify-between items-center p-3 bg-pacific-blue-50 rounded-lg">
+                                    <span className="text-ash-grey-600 font-medium">Total de Lotes</span>
+                                    <span className="font-bold text-xl text-pacific-blue-600">{stats.totalLots}</span>
+                                </div>
+                                <div className="flex justify-between items-center p-3 bg-frosted-blue-50 rounded-lg">
+                                    <span className="text-ash-grey-600 font-medium">Total de Suministros</span>
+                                    <span className="font-bold text-xl text-frosted-blue-600">{stats.totalSupplies}</span>
                                 </div>
                             </div>
                         </CardContent>

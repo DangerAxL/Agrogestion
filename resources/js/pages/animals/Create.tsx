@@ -68,25 +68,35 @@ export default function Crear({ lots, breeds }: Props) {
                             className="space-y-4"
                         >
                             <div>
-                                <Label htmlFor="caravana">Caravana</Label>
+                                <Label htmlFor="caravana">Caravana (ID)</Label>
                                 <Input id="caravana" name="caravana" required />
                             </div>
+
+                            {/* New Fields */}
                             <div>
-                                <Label htmlFor="gender">Gender</Label>
-                                <Select name="gender" required>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select gender" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="male">
-                                            Male
-                                        </SelectItem>
-                                        <SelectItem value="female">
-                                            Female
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                <Label htmlFor="caravana_nro">Caravana Number (Visual)</Label>
+                                <Input id="caravana_nro" name="caravana_nro" />
                             </div>
+                            <div>
+                                <Label htmlFor="color">Caravana Color</Label>
+                                <Input id="color" name="color" />
+                            </div>
+                            <div>
+                                <Label htmlFor="stage_name">Stage Name</Label>
+                                <Input id="stage_name" name="stage_name" />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label htmlFor="weight_entry">Entry Weight (kg)</Label>
+                                    <Input id="weight_entry" name="weight_entry" type="number" step="0.01" required />
+                                </div>
+                                <div>
+                                    <Label htmlFor="weight_current">Current Weight (kg)</Label>
+                                    <Input id="weight_current" name="weight_current" type="number" step="0.01" required />
+                                </div>
+                            </div>
+
                             <div>
                                 <Label htmlFor="breed_id">Breed</Label>
                                 <Select name="breed_id">
@@ -124,16 +134,17 @@ export default function Crear({ lots, breeds }: Props) {
                                 </Select>
                             </div>
                             <div>
-                                <Label htmlFor="birth_date">Birth Date</Label>
+                                <Label htmlFor="entry_date">Entry Date</Label>
                                 <Input
-                                    id="birth_date"
-                                    name="birth_date"
+                                    id="entry_date"
+                                    name="entry_date"
                                     type="date"
+                                    required
                                 />
                             </div>
                             <div>
                                 <Label htmlFor="status">Status</Label>
-                                <Input id="status" name="status" />
+                                <Input id="status" name="status" defaultValue="active" required />
                             </div>
                             <Button type="submit">Create Animal</Button>
                         </Form>

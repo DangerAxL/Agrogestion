@@ -2,6 +2,8 @@
 
 use App\Models\Animal;
 use App\Models\Feeding;
+use App\Models\Lot;
+use App\Models\Supply;
 use App\Models\Weighing;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -14,15 +16,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         $totalAnimals = Animal::count();
         $activeAnimals = Animal::where('status', 'active')->count();
+        $totalLots = Lot::count();
+        $totalSupplies = Supply::count();
         $averageWeight = Weighing::avg('weight') ?? 0;
-        $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('quantity') ?? 0;
-        $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('quantity') ?? 0;
+        $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('total_ration') ?? 0;
+        $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('total_ration') ?? 0;
         $efficiency = $totalAnimals > 0 ? ($totalFeedingsThisMonth / $totalAnimals) : 0;
 
         return Inertia::render('dashboard', [
             'stats' => [
                 'totalAnimals' => $totalAnimals,
                 'activeAnimals' => $activeAnimals,
+                'totalLots' => $totalLots,
+                'totalSupplies' => $totalSupplies,
                 'averageWeight' => round($averageWeight, 2),
                 'feedingsThisWeek' => $totalFeedingsThisWeek,
                 'feedingsThisMonth' => $totalFeedingsThisMonth,
@@ -52,16 +58,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('reports/weighings', [\App\Http\Controllers\ReportController::class, 'weighings'])->name('reports.weighings');
     Route::get('reports/feedings', [\App\Http\Controllers\ReportController::class, 'feedings'])->name('reports.feedings');
     Route::get('reports/supplies', [\App\Http\Controllers\ReportController::class, 'supplies'])->name('reports.supplies');
-    Route::get('analytics', function () {
-        return Inertia::render('Analytics/Index');
-    })->name('analytics.index');
-
-    // Config routes
-    Route::get('config', [\App\Http\Controllers\ConfigController::class, 'index'])->name('config.index');
-    Route::put('config', [\App\Http\Controllers\ConfigController::class, 'update'])->name('config.update');
-
-    // Documentation routes
-    Route::resource('documentation', \App\Http\Controllers\DocumentationController::class);
 
     // Notification routes
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');

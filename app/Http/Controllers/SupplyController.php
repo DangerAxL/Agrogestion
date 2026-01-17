@@ -24,7 +24,7 @@ class SupplyController extends Controller
             throw $e;
         }
 
-        return Inertia::render('livestock/Supplies/Index', [
+        return Inertia::render('Supplies/Index', [
             'supplies' => $supplies,
         ]);
     }
@@ -34,7 +34,7 @@ class SupplyController extends Controller
      */
     public function create()
     {
-        return Inertia::render('livestock/Supplies/Create');
+        return Inertia::render('Supplies/Create');
     }
 
     /**
@@ -52,7 +52,7 @@ class SupplyController extends Controller
      */
     public function show(Supply $supply)
     {
-        return Inertia::render('livestock/Supplies/Show', [
+        return Inertia::render('Supplies/Show', [
             'supply' => $supply,
         ]);
     }
@@ -62,7 +62,7 @@ class SupplyController extends Controller
      */
     public function edit(Supply $supply)
     {
-        return Inertia::render('livestock/Supplies/Edit', [
+        return Inertia::render('Supplies/Edit', [
             'supply' => $supply,
         ]);
     }

@@ -23,6 +23,9 @@ class StoreAnimalRequest extends FormRequest
             'active' => 'boolean',
             'entry_date' => 'required|date',
             'withdrawal_date' => 'nullable|date|required_if:status,sold|after:entry_date',
+            'stage_name' => 'nullable|string|max:255',
+            'caravana_nro' => 'nullable|string|max:255',
+            'color' => 'nullable|string|max:255',
         ];
     }
 }

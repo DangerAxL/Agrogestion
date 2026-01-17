@@ -24,7 +24,7 @@ class FeedTypeController extends Controller
             throw $e;
         }
 
-        return Inertia::render('livestock/FeedTypes/Index', [
+        return Inertia::render('FeedTypes/Index', [
             'feedTypes' => $feedTypes,
         ]);
     }
@@ -34,7 +34,7 @@ class FeedTypeController extends Controller
      */
     public function create()
     {
-        return Inertia::render('livestock/FeedTypes/Create');
+        return Inertia::render('FeedTypes/Create');
     }
 
     /**
@@ -52,7 +52,7 @@ class FeedTypeController extends Controller
      */
     public function show(FeedType $feedType)
     {
-        return Inertia::render('livestock/FeedTypes/Show', [
+        return Inertia::render('FeedTypes/Show', [
             'feedType' => $feedType,
         ]);
     }
@@ -62,7 +62,7 @@ class FeedTypeController extends Controller
      */
     public function edit(FeedType $feedType)
     {
-        return Inertia::render('livestock/FeedTypes/Edit', [
+        return Inertia::render('FeedTypes/Edit', [
             'feedType' => $feedType,
         ]);
     }

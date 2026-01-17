@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 import AppLayout from '@/layouts/app-layout';
-import { index, store } from '@/routes/veterinary-treatments';
+import { index, update } from '@/routes/veterinary-treatments';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
 
@@ -24,7 +24,7 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: index().url,
     },
     {
-        title: 'Create',
+        title: 'Edit',
         href: '#',
     },
 ];
@@ -34,26 +34,30 @@ interface Animal {
     caravana: string;
 }
 
-interface TreatmentCatalog {
+interface VeterinaryTreatment {
     id: number;
-    name: string;
+    treatment_name: string;
+    animal_id: number;
+    applied_at: string;
+    dosage: string;
+    notes: string;
 }
 
 interface Props {
+    veterinaryTreatment: VeterinaryTreatment;
     animals: Animal[];
-    treatmentCatalogs: TreatmentCatalog[];
 }
 
-export default function Create({ animals, treatmentCatalogs }: Props) {
+export default function Edit({ veterinaryTreatment, animals, treatmentCatalogs }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Create Veterinary Treatment" />
+            <Head title="Edit Veterinary Treatment" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold">Create Veterinary Treatment</h1>
+                        <h1 className="text-2xl font-bold">Edit Veterinary Treatment</h1>
                         <p className="text-muted-foreground">
-                            Add a new veterinary treatment record
+                            Update veterinary treatment record
                         </p>
                     </div>
                 </div>
@@ -63,31 +67,17 @@ export default function Create({ animals, treatmentCatalogs }: Props) {
                     </CardHeader>
                     <CardContent>
                         <Form
-                            action={store().url}
+                            action={update(veterinaryTreatment.id).url}
                             method="post"
                             className="space-y-4"
                         >
                             <div>
-                                <Label htmlFor="treatment_catalog_id">Treatment</Label>
-                                <Select name="treatment_catalog_id" required>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Select treatment" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {treatmentCatalogs.map((catalog) => (
-                                            <SelectItem
-                                                key={catalog.id}
-                                                value={catalog.id.toString()}
-                                            >
-                                                {catalog.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
+                                <Label htmlFor="treatment_name">Treatment Name</Label>
+                                <Input id="treatment_name" name="treatment_name" defaultValue={veterinaryTreatment.treatment_name} required />
                             </div>
                             <div>
                                 <Label htmlFor="animal_id">Animal</Label>
-                                <Select name="animal_id" required>
+                                <Select name="animal_id" defaultValue={veterinaryTreatment.animal_id.toString()} required>
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select animal" />
                                     </SelectTrigger>
@@ -109,18 +99,19 @@ export default function Create({ animals, treatmentCatalogs }: Props) {
                                     id="applied_at"
                                     name="applied_at"
                                     type="date"
+                                    defaultValue={veterinaryTreatment.applied_at}
                                     required
                                 />
                             </div>
                             <div>
                                 <Label htmlFor="dosage">Dosage</Label>
-                                <Input id="dosage" name="dosage" required />
+                                <Input id="dosage" name="dosage" defaultValue={veterinaryTreatment.dosage} required />
                             </div>
                             <div>
                                 <Label htmlFor="notes">Notes</Label>
-                                <Input id="notes" name="notes" />
+                                <Input id="notes" name="notes" defaultValue={veterinaryTreatment.notes} />
                             </div>
-                            <Button type="submit">Create Veterinary Treatment</Button>
+                            <Button type="submit">Update Veterinary Treatment</Button>
                         </Form>
                     </CardContent>
                 </Card>

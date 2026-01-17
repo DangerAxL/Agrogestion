@@ -24,7 +24,7 @@ class FeedingController extends Controller
             throw $e;
         }
 
-        return Inertia::render('livestock/Feedings/Index', [
+        return Inertia::render('Feedings/Index', [
             'feedings' => $feedings,
         ]);
     }
@@ -38,7 +38,7 @@ class FeedingController extends Controller
         $lots = Lot::all();
         $feedTypes = FeedType::all();
 
-        return Inertia::render('livestock/Feedings/Create', [
+        return Inertia::render('Feedings/Create', [
             'animals' => $animals,
             'lots' => $lots,
             'feedTypes' => $feedTypes,
@@ -62,7 +62,7 @@ class FeedingController extends Controller
     {
         $feeding->load(['lot', 'feedType']);
 
-        return Inertia::render('livestock/Feedings/Show', [
+        return Inertia::render('Feedings/Show', [
             'feeding' => $feeding,
         ]);
     }
@@ -77,7 +77,7 @@ class FeedingController extends Controller
         $lots = Lot::all();
         $feedTypes = FeedType::all();
 
-        return Inertia::render('livestock/Feedings/Edit', [
+        return Inertia::render('Feedings/Edit', [
             'feeding' => $feeding,
             'animals' => $animals,
             'lots' => $lots,

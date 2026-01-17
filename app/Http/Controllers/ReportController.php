@@ -29,7 +29,7 @@ class ReportController extends Controller
             throw $e;
         }
 
-        return Inertia::render('livestock/Reports/Index');
+        return Inertia::render('reports/Index');
     }
 
     /**
@@ -60,7 +60,7 @@ class ReportController extends Controller
             return Excel::download(new AnimalsExport($animals), 'animals_report.xlsx');
         }
 
-        return Inertia::render('livestock/Reports/Animals', [
+        return Inertia::render('reports/Animals', [
             'animals' => $animals,
             'lots' => $lots,
             'filters' => $request->only(['lot_id']),
@@ -96,7 +96,7 @@ class ReportController extends Controller
 
         $animals = Animal::all();
 
-        return Inertia::render('livestock/Reports/Weighings', [
+        return Inertia::render('reports/Weighings', [
             'weighings' => $weighings,
             'animals' => $animals,
             'filters' => $request->only(['animal_id', 'date_from', 'date_to']),
@@ -186,7 +186,7 @@ class ReportController extends Controller
             return Excel::download(new FeedingsExport($feedings, $weightGains), 'feedings_report.xlsx');
         }
 
-        return Inertia::render('livestock/Reports/Feedings', [
+        return Inertia::render('reports/Feedings', [
             'feedings' => $feedings,
             'lots' => $lots,
             'feedTypes' => $feedTypes,
@@ -206,7 +206,7 @@ class ReportController extends Controller
             return Excel::download(new SuppliesExport($supplies), 'supplies_report.xlsx');
         }
 
-        return Inertia::render('livestock/Reports/Supplies', [
+        return Inertia::render('reports/Supplies', [
             'supplies' => $supplies,
         ]);
     }
@@ -234,7 +234,7 @@ class ReportController extends Controller
             return Excel::download(new BreedsExport($breedsByLot), 'breeds_report.xlsx');
         }
 
-        return Inertia::render('livestock/Reports/Breeds', [
+        return Inertia::render('reports/Breeds', [
             'breedsByLot' => $breedsByLot,
             'stages' => $stages,
             'filters' => $request->only(['stage']),
@@ -263,7 +263,7 @@ class ReportController extends Controller
             return Excel::download(new LotsExport($lotsStats), 'lots_report.xlsx');
         }
 
-        return Inertia::render('livestock/Reports/Lots', [
+        return Inertia::render('reports/Lots', [
             'lotsStats' => $lotsStats,
         ]);
     }

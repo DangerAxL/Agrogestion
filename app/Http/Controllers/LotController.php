@@ -19,7 +19,7 @@ class LotController extends Controller
         $lots = Lot::withCount('animals')->paginate(15);
         Log::info('Lots loaded successfully', ['count' => $lots->count()]);
 
-        return Inertia::render('livestock/Lots/Index', [
+        return Inertia::render('Lots/Index', [
             'lots' => $lots,
         ]);
     }
@@ -29,7 +29,7 @@ class LotController extends Controller
      */
     public function create()
     {
-        return Inertia::render('livestock/Lots/Create');
+        return Inertia::render('Lots/Create');
     }
 
     /**
@@ -49,7 +49,7 @@ class LotController extends Controller
     {
         $lot->load(['animals', 'feedings']);
 
-        return Inertia::render('livestock/Lots/Show', [
+        return Inertia::render('Lots/Show', [
             'lot' => $lot,
         ]);
     }
@@ -59,7 +59,7 @@ class LotController extends Controller
      */
     public function edit(Lot $lot)
     {
-        return Inertia::render('livestock/Lots/Edit', [
+        return Inertia::render('Lots/Edit', [
             'lot' => $lot,
         ]);
     }

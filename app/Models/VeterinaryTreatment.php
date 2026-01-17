@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class VeterinaryTreatment extends Model
 {
     protected $fillable = [
-        'treatment_catalog_id',
+        'treatment_name',
         'animal_id',
         'applied_at',
         'dosage',
@@ -18,11 +18,6 @@ class VeterinaryTreatment extends Model
     protected $casts = [
         'applied_at' => 'date',
     ];
-
-    public function treatmentCatalog(): BelongsTo
-    {
-        return $this->belongsTo(TreatmentCatalog::class);
-    }
 
     public function animal(): BelongsTo
     {

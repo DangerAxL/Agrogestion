@@ -18,7 +18,7 @@ class HealthAlertController extends Controller
     {
         $healthAlerts = HealthAlert::with(['animal', 'creator'])->paginate(15);
 
-        return Inertia::render('livestock/HealthAlerts/Index', [
+        return Inertia::render('HealthAlerts/Index', [
             'healthAlerts' => $healthAlerts,
         ]);
     }
@@ -30,7 +30,7 @@ class HealthAlertController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('livestock/HealthAlerts/Create', [
+        return Inertia::render('HealthAlerts/Create', [
             'animals' => $animals,
         ]);
     }
@@ -59,7 +59,7 @@ class HealthAlertController extends Controller
     {
         $healthAlert->load(['animal', 'creator']);
 
-        return Inertia::render('livestock/HealthAlerts/Show', [
+        return Inertia::render('HealthAlerts/Show', [
             'healthAlert' => $healthAlert,
         ]);
     }
@@ -71,7 +71,7 @@ class HealthAlertController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('livestock/HealthAlerts/Edit', [
+        return Inertia::render('HealthAlerts/Edit', [
             'healthAlert' => $healthAlert,
             'animals' => $animals,
         ]);
