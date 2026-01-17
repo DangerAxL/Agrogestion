@@ -17,6 +17,7 @@ use App\Policies\LotPolicy;
 use App\Policies\SupplyPolicy;
 use App\Policies\WeighingPolicy;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +35,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Schema::defaultStringLength(125);
+
         Gate::policy(Animal::class, AnimalPolicy::class);
         Gate::policy(Lot::class, LotPolicy::class);
         Gate::policy(Breed::class, BreedPolicy::class);

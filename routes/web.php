@@ -3,7 +3,9 @@
 use App\Models\Animal;
 use App\Models\Feeding;
 use App\Models\Weighing;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -15,8 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $totalAnimals = Animal::count();
         $activeAnimals = Animal::where('status', 'active')->count();
         $averageWeight = Weighing::avg('weight') ?? 0;
-        $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('quantity') ?? 0;
-        $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('quantity') ?? 0;
+
+        $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('total_ration') ?? 0;
+        $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('total_ration') ?? 0;
         $efficiency = $totalAnimals > 0 ? ($totalFeedingsThisMonth / $totalAnimals) : 0;
 
         return Inertia::render('dashboard', [

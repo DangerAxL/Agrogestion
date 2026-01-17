@@ -25,7 +25,7 @@ class FeedingsExport implements FromCollection, WithHeadings
                 'Fecha' => $feeding->date->format('d/m/Y'),
                 'Animal' => $feeding->animal->caravana ?? '',
                 'Tipo de Alimentación' => $feeding->feed_type->name ?? '',
-                'Cantidad' => $feeding->quantity,
+                'Cantidad' => $feeding->total_ration,
             ];
         });
 

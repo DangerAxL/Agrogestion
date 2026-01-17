@@ -91,11 +91,6 @@ const mainNavItems: NavItem[] = [
         icon: BookOpen,
     },
     {
-        title: 'Analytics',
-        href: route('analytics.index'),
-        icon: BarChart3,
-    },
-    {
         title: 'Usuarios',
         href: usersIndex.url(),
         icon: Users,
