@@ -54,7 +54,17 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Cebada', 'composition' => 'Fibra digestible'],
         ]);
         \App\Models\Supply::factory(10)->create();
-        \App\Models\Animal::factory(50)->create();
+        \App\Models\Animal::factory(50)->create()->each(function ($animal) {
+            \App\Models\Stage::create([
+                'stage_name' => 'Recría', // Default stage for seeded data
+                'animal_id' => $animal->id,
+            ]);
+            \App\Models\Caravana::create([
+                'caravana_nro' => 'C-' . str_pad($animal->id, 5, '0', STR_PAD_LEFT),
+                'color' => ['Red', 'Blue', 'Yellow', 'Green'][rand(0, 3)],
+                'animal_id' => $animal->id,
+            ]);
+        });
         \App\Models\Weighing::factory(100)->create();
         \App\Models\Feeding::factory(60)->create();
     }
