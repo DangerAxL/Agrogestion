@@ -21,7 +21,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $totalLots = Lot::count();
         $totalSupplies = Supply::count();
         $averageWeight = Weighing::avg('weight') ?? 0;
+<<<<<<< HEAD
+=======
 
+>>>>>>> d2a785f1c775fe03db40315c589a1e1fc13a01d9
         $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('total_ration') ?? 0;
         $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('total_ration') ?? 0;
         $efficiency = $totalAnimals > 0 ? ($totalFeedingsThisMonth / $totalAnimals) : 0;
@@ -69,4 +72,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy']);
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';
