@@ -17,8 +17,8 @@ class FeedingFactory extends Factory
     public function definition(): array
     {
         return [
-            'lot_id' => \App\Models\Lot::factory(),
-            'feed_type_id' => \App\Models\FeedType::factory(),
+            'lot_id' => \App\Models\Lot::inRandomOrder()->first()->id ?? \App\Models\Lot::factory(),
+            'feed_type_id' => \App\Models\FeedType::inRandomOrder()->first()->id ?? \App\Models\FeedType::factory(),
             'date' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'ration_kg' => $this->faker->randomFloat(2, 1, 5),
             'total_ration' => $this->faker->randomFloat(2, 10, 100),

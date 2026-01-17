@@ -55,8 +55,14 @@ interface FeedType {
     name: string;
 }
 
+interface PaginatedResponse<T> {
+    data: T[];
+    links: any[];
+    meta: any;
+}
+
 interface Props {
-    feedings: Feeding[];
+    feedings: PaginatedResponse<Feeding>;
     animals: Animal[];
     feed_types: FeedType[];
     filters: {
@@ -118,13 +124,24 @@ export default function Feedings({
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a href={`/reports/feedings?${new URLSearchParams(filters as any).toString()}&export=excel`}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Export Excel
-                            </a>
+                        import {exportToExcel} from '@/utils/excel';
+
+                        // ... (in component)
+
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => exportToExcel(feedings.data, [
+                                { key: 'animal.name', header: 'Animal' },
+                                { key: 'feed_type.name', header: 'Feed Type' },
+                                { key: 'quantity', header: 'Quantity (kg)' },
+                                { key: 'date', header: 'Date' }
+                            ], 'feedings_report')}
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Export Excel
                         </Button>
-                        <PDFDownloadLink document={<FeedingsReportPdf feedings={feedings} weightGains={weightGains} />} fileName="feedings-report.pdf">
+                        <PDFDownloadLink document={<FeedingsReportPdf feedings={feedings.data} weightGains={weightGains} />} fileName="feedings-report.pdf">
                             {({ loading }) => (
                                 <Button variant="outline" size="sm" disabled={loading}>
                                     <Download className="mr-2 h-4 w-4" />
@@ -218,11 +235,11 @@ export default function Feedings({
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Feedings ({feedings.length})</CardTitle>
+                        <CardTitle>Feedings ({feedings.data.length})</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {feedings.map((feeding) => (
+                            {feedings.data.map((feeding) => (
                                 <div
                                     key={feeding.id}
                                     className="flex items-center justify-between border-b pb-4"

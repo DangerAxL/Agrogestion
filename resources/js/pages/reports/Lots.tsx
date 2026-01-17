@@ -12,6 +12,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { ArrowLeft, Download } from 'lucide-react';
+import { exportToExcel } from '@/utils/excel';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import LotsReportPdf from '@/components/pdf/LotsReportPdf';
@@ -106,11 +107,19 @@ export default function Lots({ lotsStats }: Props) {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a href="/reports/lots?export=excel">
-                                <Download className="mr-2 h-4 w-4" />
-                                Export Excel
-                            </a>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => exportToExcel(lotsStats, [
+                                { key: 'name', header: 'Name' },
+                                { key: 'total_animals', header: 'Total Animals' },
+                                { key: 'active_animals', header: 'Active Animals' },
+                                { key: 'inactive_animals', header: 'Inactive Animals' },
+                                { key: 'average_weight', header: 'Avg Weight' }
+                            ], 'lots_report')}
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Export Excel
                         </Button>
                         <PDFDownloadLink document={<LotsReportPdf lotsStats={lotsStats} chartImage={chartImage} />} fileName="lots-report.pdf">
                             {({ loading }) => (

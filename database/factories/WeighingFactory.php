@@ -17,7 +17,7 @@ class WeighingFactory extends Factory
     public function definition(): array
     {
         return [
-            'animal_id' => \App\Models\Animal::factory(),
+            'animal_id' => \App\Models\Animal::inRandomOrder()->first()->id ?? \App\Models\Animal::factory(),
             'date' => $this->faker->dateTimeBetween('-6 months', 'now'),
             'weight' => $this->faker->numberBetween(200, 600),
             'daily_gain' => $this->faker->randomFloat(3, 0.5, 2.5),

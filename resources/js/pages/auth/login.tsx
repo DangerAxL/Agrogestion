@@ -41,7 +41,8 @@ export default function Login({
                         </div>
 
                         <Form
-                            {...store.form()}
+                            action={store.url()}
+                            method="post"
                             resetOnSuccess={['password']}
                             className="space-y-6"
                         >

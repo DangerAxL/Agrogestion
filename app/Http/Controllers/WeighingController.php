@@ -22,7 +22,7 @@ class WeighingController extends Controller
             throw $e;
         }
 
-        return Inertia::render('Weighings/Index', [
+        return Inertia::render('weighings/Index', [
             'weighings' => $weighings,
         ]);
     }
@@ -34,7 +34,7 @@ class WeighingController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('Weighings/Create', [
+        return Inertia::render('weighings/Create', [
             'animals' => $animals,
         ]);
     }
@@ -56,7 +56,7 @@ class WeighingController extends Controller
     {
         $weighing->load('animal');
 
-        return Inertia::render('Weighings/Show', [
+        return Inertia::render('weighings/Show', [
             'weighing' => $weighing,
         ]);
     }
@@ -68,7 +68,7 @@ class WeighingController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('Weighings/Edit', [
+        return Inertia::render('weighings/Edit', [
             'weighing' => $weighing,
             'animals' => $animals,
         ]);

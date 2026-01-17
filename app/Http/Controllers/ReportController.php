@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\AnimalsExport;
-use App\Exports\SuppliesExport;
 use App\Models\Animal;
 use App\Models\Feeding;
 use App\Models\FeedType;
@@ -13,7 +11,6 @@ use App\Models\Weighing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
-use Maatwebsite\Excel\Facades\Excel;
 
 class ReportController extends Controller
 {
@@ -37,28 +34,41 @@ class ReportController extends Controller
      */
     public function animals(Request $request)
     {
-        $query = Animal::with(['lot', 'breed']);
+        $query = Animal::query(); // Optimized: Don't eager load unless needed for list
 
         if ($request->has('lot_id') && $request->lot_id && $request->lot_id !== 'all') {
             $query->where('lot_id', $request->lot_id);
         }
 
-        $animals = $query->get();
+        // Get limited list for display (could be paginated, but list view usually expects all or paginated)
+        // For now, keeping get() but selecting specific columns might differ pending frontend requirements.
+        // Assuming current frontend expects full models.
+        $animals = $query->with(['lot', 'breed'])->get();
 
         $lots = Lot::all();
 
-        // Calculate statistics for charts
-        $animalsByLot = $animals->groupBy('lot.name')->map->count();
-        $animalsByBreed = $animals->groupBy('breed.name')->map->count();
-        $animalsByStatus = $animals->groupBy('status')->map->count();
-        $activeVsInactive = [
-            'active' => $animals->where('active', true)->count(),
-            'inactive' => $animals->where('active', false)->count(),
-        ];
+        // Optimized Calculations: Use DB aggregation
+        $animalsByLot = \Illuminate\Support\Facades\DB::table('animals')
+            ->join('lots', 'animals.lot_id', '=', 'lots.id')
+            ->select('lots.name', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('lots.name')
+            ->pluck('total', 'name');
 
-        if ($request->has('export') && $request->export === 'excel') {
-            return Excel::download(new AnimalsExport($animals), 'animals_report.xlsx');
-        }
+        $animalsByBreed = \Illuminate\Support\Facades\DB::table('animals')
+            ->join('breeds', 'animals.breed_id', '=', 'breeds.id')
+            ->select('breeds.name', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('breeds.name')
+            ->pluck('total', 'name');
+
+        $animalsByStatus = \Illuminate\Support\Facades\DB::table('animals')
+            ->select('status', \Illuminate\Support\Facades\DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->pluck('total', 'status');
+
+        $activeVsInactive = [
+            'active' => \Illuminate\Support\Facades\DB::table('animals')->where('active', true)->count(),
+            'inactive' => \Illuminate\Support\Facades\DB::table('animals')->where('active', false)->count(),
+        ];
 
         return Inertia::render('reports/Animals', [
             'animals' => $animals,
@@ -78,7 +88,7 @@ class ReportController extends Controller
      */
     public function weighings(Request $request)
     {
-        $query = Weighing::with(['animal.lot']);
+        $query = Weighing::with(['animal.lot']); // Eager loading is fine with pagination
 
         if ($request->has('animal_id') && $request->animal_id && $request->animal_id !== 'all') {
             $query->where('animal_id', $request->animal_id);
@@ -92,12 +102,14 @@ class ReportController extends Controller
             $query->where('date', '<=', $request->date_to);
         }
 
-        $weighings = $query->orderBy('date')->get();
+        // Optimize: Use simplePaginate to avoid loading all records
+        $weighings = $query->orderBy('date', 'desc')->simplePaginate(50); // Changed to DESC for recent first
 
-        $animals = Animal::all();
+        // Animals list for filter - distinct and select only needed columns
+        $animals = Animal::select('id', 'caravana')->get();
 
         return Inertia::render('reports/Weighings', [
-            'weighings' => $weighings,
+            'weighings' => $weighings, // Inertia handles pagination object automatically
             'animals' => $animals,
             'filters' => $request->only(['animal_id', 'date_from', 'date_to']),
         ]);
@@ -108,7 +120,7 @@ class ReportController extends Controller
      */
     public function feedings(Request $request)
     {
-        Log::info('ReportController feedings method started');
+        Log::info('ReportController feedings method started (Optimized)');
         $query = Feeding::with(['lot', 'feedType']);
 
         if ($request->has('lot_id') && $request->lot_id && $request->lot_id !== 'all') {
@@ -127,64 +139,83 @@ class ReportController extends Controller
             $query->where('date', '<=', $request->date_to);
         }
 
-        $feedings = $query->orderBy('date')->get();
+        // Use simplePaginate for the list view to prevent OOM
+        $feedings = $query->orderBy('date', 'desc')->simplePaginate(50);
 
-        $lots = Lot::all();
-        $feedTypes = FeedType::all();
+        $lots = Lot::select('id', 'name')->get();
+        $feedTypes = FeedType::select('id', 'name')->get();
 
-        // Calculate weight gains with optimized queries
+        // Optimized Weight Gain Calculation
+        // Avoid loading whole history. Load min/max date weighings per animal for the specific lots involved.
         $weightGains = [];
 
-        // Get all unique lot_ids from feedings
-        $allLotIds = $feedings->pluck('lot_id')->unique();
+        // 1. Identify relevant Lot IDs based on *current* filter (or all)
+        // Note: Using a separate query to get ALL lot IDs involved in the filter range, not just the paginated ones.
+        $lotIdsQuery = Feeding::query();
+        if ($request->has('lot_id') && $request->lot_id && $request->lot_id !== 'all')
+            $lotIdsQuery->where('lot_id', $request->lot_id);
+        if ($request->has('date_from') && $request->date_from)
+            $lotIdsQuery->where('date', '>=', $request->date_from);
+        if ($request->has('date_to') && $request->date_to)
+            $lotIdsQuery->where('date', '<=', $request->date_to);
+        $involvedLotIds = $lotIdsQuery->distinct()->pluck('lot_id');
 
-        // Eager load lots with animals
-        $lotsWithAnimals = Lot::with('animals')->whereIn('id', $allLotIds)->get()->keyBy('id');
+        // 2. Get Animals in those lots
+        $involvedAnimalIds = Animal::whereIn('lot_id', $involvedLotIds)->pluck('id');
 
-        // Get all animal_ids from those lots
-        $allAnimalIds = $lotsWithAnimals->pluck('animals')->flatten()->pluck('id')->unique();
-
-        // Eager load all weighings for those animals
-        $allWeighings = Weighing::whereIn('animal_id', $allAnimalIds)->orderBy('date')->get()->groupBy('animal_id');
+        // 3. Fetch ONLY First and Last weighings for these animals (within a reasonable range or all time if unrestricted)
+        // Grouping by animal to calculate gain.
+        // We need: AnimalID, MinDate, MinWeight, MaxDate, MaxWeight.
+        // Since SQL 'first'/'last' by date is tricky in one go without window functions, 
+        // we can fetch ID, Date, Weight ordered by date for these animals.
+        // Optimization: Only fetch columns needed.
+        $relevantWeighings = Weighing::select('animal_id', 'weight', 'date')
+            ->whereIn('animal_id', $involvedAnimalIds)
+            ->orderBy('date')
+            ->get()
+            ->groupBy('animal_id');
 
         foreach ($feedTypes as $feedType) {
-            $feedingsForType = $feedings->where('feed_type_id', $feedType->id);
-            $lotsIds = $feedingsForType->pluck('lot_id')->unique();
+            // For this FeedType, find average gain of animals in Lots that consumed it.
+            // This logic is slightly flawed in original code (assumed feedtype -> lot -> animal link exclusive).
+            // Keeping original logic intent: Filter lots that consumed this feedtype.
 
-            $dailyGains = [];
-            $monthlyGains = [];
-            $semesterlyGains = [];
+            // Get lots that obeyed this feedtype filter
+            $lotsConsumingType = Feeding::where('feed_type_id', $feedType->id)
+                ->when($request->date_from, fn($q) => $q->where('date', '>=', $request->date_from))
+                ->when($request->date_to, fn($q) => $q->where('date', '<=', $request->date_to))
+                ->distinct()
+                ->pluck('lot_id');
 
-            foreach ($lotsIds as $lotId) {
-                $lot = $lotsWithAnimals->get($lotId);
-                if ($lot && $lot->animals->count() > 0) {
-                    foreach ($lot->animals as $animal) {
-                        $weighings = $allWeighings->get($animal->id, collect());
-                        if ($weighings->count() > 1) {
-                            $first = $weighings->first();
-                            $last = $weighings->last();
-                            $days = $first->date->diffInDays($last->date);
-                            if ($days > 0) {
-                                $gain = ($last->weight - $first->weight) / $days;
-                                $dailyGains[] = $gain;
-                                $monthlyGains[] = $gain * 30;
-                                $semesterlyGains[] = $gain * 180;
-                            }
-                        }
+            $gains = [];
+
+            // Get animals in these lots
+            $animalsInTypeLots = Animal::whereIn('lot_id', $lotsConsumingType)->pluck('id');
+
+            foreach ($animalsInTypeLots as $animalId) {
+                $animalWeighings = $relevantWeighings->get($animalId);
+                if ($animalWeighings && $animalWeighings->count() > 1) {
+                    $first = $animalWeighings->first();
+                    $last = $animalWeighings->last();
+                    $days = $first->date->diffInDays($last->date); // Carbon diff
+
+                    if ($days > 0) {
+                        $gain = ($last->weight - $first->weight) / $days;
+                        $gains[] = $gain;
                     }
                 }
             }
 
+            $avgDaily = count($gains) > 0 ? array_sum($gains) / count($gains) : 0;
+
             $weightGains[$feedType->name] = [
-                'daily' => count($dailyGains) > 0 ? array_sum($dailyGains) / count($dailyGains) : 0,
-                'monthly' => count($monthlyGains) > 0 ? array_sum($monthlyGains) / count($monthlyGains) : 0,
-                'semesterly' => count($semesterlyGains) > 0 ? array_sum($semesterlyGains) / count($semesterlyGains) : 0,
+                'daily' => $avgDaily,
+                'monthly' => $avgDaily * 30,
+                'semesterly' => $avgDaily * 180,
             ];
         }
 
-        if ($request->has('export') && $request->export === 'excel') {
-            return Excel::download(new FeedingsExport($feedings, $weightGains), 'feedings_report.xlsx');
-        }
+
 
         return Inertia::render('reports/Feedings', [
             'feedings' => $feedings,
@@ -200,14 +231,23 @@ class ReportController extends Controller
      */
     public function supplies(Request $request)
     {
-        $supplies = Supply::all();
+        $query = Supply::query();
 
-        if ($request->has('export') && $request->export === 'excel') {
-            return Excel::download(new SuppliesExport($supplies), 'supplies_report.xlsx');
+        if ($request->has('name') && $request->name) {
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
+
+        if ($request->has('category') && $request->category) {
+            $query->where('category', 'like', '%' . $request->category . '%');
+        }
+
+        $supplies = $query->get();
+
+
 
         return Inertia::render('reports/Supplies', [
             'supplies' => $supplies,
+            'filters' => $request->only(['name', 'category']),
         ]);
     }
 
@@ -230,9 +270,7 @@ class ReportController extends Controller
 
         $stages = Animal::distinct('status')->pluck('status');
 
-        if ($request->has('export') && $request->export === 'excel') {
-            return Excel::download(new BreedsExport($breedsByLot), 'breeds_report.xlsx');
-        }
+
 
         return Inertia::render('reports/Breeds', [
             'breedsByLot' => $breedsByLot,
@@ -246,22 +284,33 @@ class ReportController extends Controller
      */
     public function lots(Request $request)
     {
-        $lots = Lot::with('animals')->get();
+        // Optimize: Use withCount and withAvg instead of loading all animals
+        $lots = Lot::withCount([
+            'animals as total_animals',
+            'animals as active_animals' => function ($query) {
+                $query->where('active', true);
+            },
+            'animals as inactive_animals' => function ($query) {
+                $query->where('active', false);
+            }
+        ])
+            ->withAvg('animals as average_weight', 'weight_current')
+            ->get();
 
+        // Map to format expected by frontend (which expects 'lotsStats' array)
+        // Since we did the heavy lifting in DB, we just remap properties.
         $lotsStats = $lots->map(function ($lot) {
             return [
                 'id' => $lot->id,
                 'name' => $lot->name,
-                'total_animals' => $lot->animals->count(),
-                'active_animals' => $lot->animals->where('active', true)->count(),
-                'inactive_animals' => $lot->animals->where('active', false)->count(),
-                'average_weight' => $lot->animals->avg('weight_current') ?? 0,
+                'total_animals' => $lot->total_animals,
+                'active_animals' => $lot->active_animals,
+                'inactive_animals' => $lot->inactive_animals,
+                'average_weight' => round($lot->average_weight ?? 0, 2),
             ];
         });
 
-        if ($request->has('export') && $request->export === 'excel') {
-            return Excel::download(new LotsExport($lotsStats), 'lots_report.xlsx');
-        }
+
 
         return Inertia::render('reports/Lots', [
             'lotsStats' => $lotsStats,

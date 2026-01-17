@@ -12,7 +12,10 @@ import {
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
+import { exportToExcel } from '@/utils/excel';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import WeighingsReportPdf from '@/components/pdf/WeighingsReportPdf';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -43,8 +46,14 @@ interface Animal {
     name: string;
 }
 
+interface PaginatedResponse<T> {
+    data: T[];
+    links: any[];
+    meta: any;
+}
+
 interface Props {
-    weighings: Weighing[];
+    weighings: PaginatedResponse<Weighing>;
     animals: Animal[];
     filters: {
         animal_id?: string;
@@ -76,6 +85,29 @@ export default function Weighings({ weighings, animals, filters }: Props) {
                         </div>
                     </div>
                 </div>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => exportToExcel(weighings.data, [
+                            { key: 'animal.name', header: 'Animal' },
+                            { key: 'weight', header: 'Weight (kg)' },
+                            { key: 'date', header: 'Date' }
+                        ], 'weighings_report')}
+                    >
+                        <Download className="mr-2 h-4 w-4" />
+                        Export Excel
+                    </Button>
+                    <PDFDownloadLink document={<WeighingsReportPdf weighings={weighings.data} />} fileName="weighings-report.pdf">
+                        {({ loading }) => (
+                            <Button variant="outline" size="sm" disabled={loading}>
+                                <Download className="mr-2 h-4 w-4" />
+                                {loading ? 'Generating PDF...' : 'Export PDF'}
+                            </Button>
+                        )}
+                    </PDFDownloadLink>
+                </div>
+
                 <Card>
                     <CardHeader>
                         <CardTitle>Filters</CardTitle>
@@ -136,11 +168,11 @@ export default function Weighings({ weighings, animals, filters }: Props) {
                 </Card>
                 <Card>
                     <CardHeader>
-                        <CardTitle>Weighings ({weighings.length})</CardTitle>
+                        <CardTitle>Weighings ({weighings.data.length})</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {weighings.map((weighing) => (
+                            {weighings.data.map((weighing) => (
                                 <div
                                     key={weighing.id}
                                     className="flex items-center justify-between border-b pb-4"
@@ -160,6 +192,6 @@ export default function Weighings({ weighings, animals, filters }: Props) {
                     </CardContent>
                 </Card>
             </div>
-        </AppLayout>
+        </AppLayout >
     );
 }

@@ -5,7 +5,10 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Download } from 'lucide-react';
+import { exportToExcel } from '@/utils/excel';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import SuppliesReportPdf from '@/components/pdf/SuppliesReportPdf';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -38,7 +41,7 @@ interface Props {
     };
 }
 
-export default function Supplies({ supplies, filters }: Props) {
+export default function Supplies({ supplies, filters = {} }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Supplies Report" />
@@ -61,66 +64,90 @@ export default function Supplies({ supplies, filters }: Props) {
                         </div>
                     </div>
                 </div>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Filters</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <Form
-                            action="/reports/supplies"
-                            method="get"
-                            className="flex flex-wrap gap-4"
-                        >
-                            <div className="min-w-48 flex-1">
-                                <Label htmlFor="name">Name</Label>
-                                <Input
-                                    id="name"
-                                    name="name"
-                                    placeholder="Search by name"
-                                    defaultValue={filters.name}
-                                />
-                            </div>
-                            <div className="min-w-48 flex-1">
-                                <Label htmlFor="category">Category</Label>
-                                <Input
-                                    id="category"
-                                    name="category"
-                                    placeholder="Search by category"
-                                    defaultValue={filters.category}
-                                />
-                            </div>
-                            <div className="flex items-end">
-                                <Button type="submit">Apply Filters</Button>
-                            </div>
-                        </Form>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Supplies ({supplies.length})</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="space-y-4">
-                            {supplies.map((supply) => (
-                                <div
-                                    key={supply.id}
-                                    className="flex items-center justify-between border-b pb-4"
-                                >
-                                    <div>
-                                        <h3 className="font-semibold">
-                                            {supply.name}
-                                        </h3>
-                                        <p className="text-sm text-muted-foreground">
-                                            {supply.category} •{' '}
-                                            {supply.quantity} {supply.unit}
-                                        </p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => exportToExcel(supplies, [
+                            { key: 'name', header: 'Name' },
+                            { key: 'category', header: 'Category' },
+                            { key: 'quantity', header: 'Quantity' },
+                            { key: 'unit', header: 'Unit' }
+                        ], 'supplies_report')}
+                    >
+                        <Download className="mr-2 h-4 w-4" />
+                        Export Excel
+                    </Button>
+                    <PDFDownloadLink document={<SuppliesReportPdf supplies={supplies} />} fileName="supplies-report.pdf">
+                        {({ loading }) => (
+                            <Button variant="outline" size="sm" disabled={loading}>
+                                <Download className="mr-2 h-4 w-4" />
+                                {loading ? 'Generating PDF...' : 'Export PDF'}
+                            </Button>
+                        )}
+                    </PDFDownloadLink>
+                </div>
             </div>
-        </AppLayout>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Filters</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Form
+                        action="/reports/supplies"
+                        method="get"
+                        className="flex flex-wrap gap-4"
+                    >
+                        <div className="min-w-48 flex-1">
+                            <Label htmlFor="name">Name</Label>
+                            <Input
+                                id="name"
+                                name="name"
+                                placeholder="Search by name"
+                                defaultValue={filters.name}
+                            />
+                        </div>
+                        <div className="min-w-48 flex-1">
+                            <Label htmlFor="category">Category</Label>
+                            <Input
+                                id="category"
+                                name="category"
+                                placeholder="Search by category"
+                                defaultValue={filters.category}
+                            />
+                        </div>
+                        <div className="flex items-end">
+                            <Button type="submit">Apply Filters</Button>
+                        </div>
+                    </Form>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Supplies ({supplies.length})</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        {supplies.map((supply) => (
+                            <div
+                                key={supply.id}
+                                className="flex items-center justify-between border-b pb-4"
+                            >
+                                <div>
+                                    <h3 className="font-semibold">
+                                        {supply.name}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                        {supply.category} •{' '}
+                                        {supply.quantity} {supply.unit}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+
+        </AppLayout >
     );
 }

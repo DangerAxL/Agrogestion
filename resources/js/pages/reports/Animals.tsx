@@ -15,6 +15,7 @@ import { ArrowLeft, Download } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import AnimalsReportPdf from '@/components/pdf/AnimalsReportPdf';
+import { exportToExcel } from '@/utils/excel';
 import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -115,11 +116,24 @@ export default function Animals({ animals, lots, filters, charts }: Props) {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a href={`/reports/animals?${new URLSearchParams(filters as any).toString()}&export=excel`}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Export Excel
-                            </a>
+
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => exportToExcel(animals, [
+                                { key: 'id', header: 'ID' },
+                                { key: 'caravana', header: 'Caravana' },
+                                { key: 'breed.name', header: 'Breed' },
+                                { key: 'lot.name', header: 'Lot' },
+                                { key: 'status', header: 'Status' },
+                                { key: 'active', header: 'Active' },
+                                { key: 'weight_entry', header: 'Weight Entry' },
+                                { key: 'weight_current', header: 'Weight Current' },
+                                { key: 'entry_date', header: 'Entry Date' },
+                            ], 'animals_report')}
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Export Excel
                         </Button>
                         <PDFDownloadLink document={<AnimalsReportPdf animals={animals} />} fileName="animals-report.pdf">
                             {({ loading }) => (

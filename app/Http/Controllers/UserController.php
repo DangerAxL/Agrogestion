@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         $users = User::with('roles')->paginate(15);
 
-        return Inertia::render('Users/Index', [
+        return Inertia::render('users/Index', [
             'users' => $users,
         ]);
     }
@@ -30,7 +30,7 @@ class UserController extends Controller
     {
         $roles = Role::all();
 
-        return Inertia::render('Users/Create', [
+        return Inertia::render('users/Create', [
             'roles' => $roles,
         ]);
     }
@@ -58,7 +58,7 @@ class UserController extends Controller
     {
         $user->load('roles');
 
-        return Inertia::render('Users/Show', [
+        return Inertia::render('users/Show', [
             'user' => $user,
         ]);
     }
@@ -71,7 +71,7 @@ class UserController extends Controller
         $user->load('roles');
         $roles = Role::all();
 
-        return Inertia::render('Users/Edit', [
+        return Inertia::render('users/Edit', [
             'user' => $user,
             'roles' => $roles,
         ]);

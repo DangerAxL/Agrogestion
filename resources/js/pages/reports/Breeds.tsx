@@ -12,6 +12,7 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Form, Head } from '@inertiajs/react';
 import { ArrowLeft, Download } from 'lucide-react';
+import { exportToExcel } from '@/utils/excel';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import BreedsReportPdf from '@/components/pdf/BreedsReportPdf';
@@ -104,11 +105,17 @@ export default function Breeds({ breedsByLot, stages, filters }: Props) {
                         </div>
                     </div>
                     <div className="flex gap-2">
-                        <Button variant="outline" size="sm" asChild>
-                            <a href={`/reports/breeds?${new URLSearchParams(filters as any).toString()}&export=excel`}>
-                                <Download className="mr-2 h-4 w-4" />
-                                Export Excel
-                            </a>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => exportToExcel(chartData, [
+                                { key: 'lot', header: 'Lot' },
+                                { key: 'breed', header: 'Breed' },
+                                { key: 'count', header: 'Count' }
+                            ], 'breeds_report')}
+                        >
+                            <Download className="mr-2 h-4 w-4" />
+                            Export Excel
                         </Button>
                         <PDFDownloadLink document={<BreedsReportPdf breedsByLot={breedsByLot} chartImage={chartImage} />} fileName="breeds-report.pdf">
                             {({ loading }) => (

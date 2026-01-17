@@ -65,7 +65,7 @@ class DatabaseSeeder extends Seeder
                 'animal_id' => $animal->id,
             ]);
         });
-        \App\Models\Weighing::factory(100)->create();
-        \App\Models\Feeding::factory(60)->create();
+        \App\Models\Weighing::factory(300)->create();
+        \App\Models\Feeding::factory(100)->create();
     }
 }

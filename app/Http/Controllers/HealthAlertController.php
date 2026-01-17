@@ -18,7 +18,7 @@ class HealthAlertController extends Controller
     {
         $healthAlerts = HealthAlert::with(['animal', 'creator'])->paginate(15);
 
-        return Inertia::render('HealthAlerts/Index', [
+        return Inertia::render('health-alerts/Index', [
             'healthAlerts' => $healthAlerts,
         ]);
     }
@@ -30,7 +30,7 @@ class HealthAlertController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('HealthAlerts/Create', [
+        return Inertia::render('health-alerts/Create', [
             'animals' => $animals,
         ]);
     }
@@ -59,7 +59,7 @@ class HealthAlertController extends Controller
     {
         $healthAlert->load(['animal', 'creator']);
 
-        return Inertia::render('HealthAlerts/Show', [
+        return Inertia::render('health-alerts/Show', [
             'healthAlert' => $healthAlert,
         ]);
     }
@@ -71,7 +71,7 @@ class HealthAlertController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('HealthAlerts/Edit', [
+        return Inertia::render('health-alerts/Edit', [
             'healthAlert' => $healthAlert,
             'animals' => $animals,
         ]);
@@ -85,9 +85,9 @@ class HealthAlertController extends Controller
         $data = $request->validated();
 
         if (isset($data['resolved'])) {
-            if ($data['resolved'] && ! $healthAlert->resolved) {
+            if ($data['resolved'] && !$healthAlert->resolved) {
                 $data['resolved_at'] = now();
-            } elseif (! $data['resolved'] && $healthAlert->resolved) {
+            } elseif (!$data['resolved'] && $healthAlert->resolved) {
                 $data['resolved_at'] = null;
             }
         }

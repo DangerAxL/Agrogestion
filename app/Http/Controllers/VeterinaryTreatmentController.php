@@ -25,7 +25,7 @@ class VeterinaryTreatmentController extends Controller
             throw $e;
         }
 
-        return Inertia::render('VeterinaryTreatments/Index', [
+        return Inertia::render('veterinary-treatments/Index', [
             'veterinaryTreatments' => $veterinaryTreatments,
         ]);
     }
@@ -37,7 +37,7 @@ class VeterinaryTreatmentController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('VeterinaryTreatments/Create', [
+        return Inertia::render('veterinary-treatments/Create', [
             'animals' => $animals,
         ]);
     }
@@ -59,7 +59,7 @@ class VeterinaryTreatmentController extends Controller
     {
         $veterinaryTreatment->load(['animal']);
 
-        return Inertia::render('VeterinaryTreatments/Show', [
+        return Inertia::render('veterinary-treatments/Show', [
             'veterinaryTreatment' => $veterinaryTreatment,
         ]);
     }
@@ -71,7 +71,7 @@ class VeterinaryTreatmentController extends Controller
     {
         $animals = Animal::all();
 
-        return Inertia::render('VeterinaryTreatments/Edit', [
+        return Inertia::render('veterinary-treatments/Edit', [
             'veterinaryTreatment' => $veterinaryTreatment,
             'animals' => $animals,
         ]);

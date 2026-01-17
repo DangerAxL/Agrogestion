@@ -24,7 +24,7 @@ class SupplyController extends Controller
             throw $e;
         }
 
-        return Inertia::render('Supplies/Index', [
+        return Inertia::render('supplies/Index', [
             'supplies' => $supplies,
         ]);
     }
@@ -34,7 +34,7 @@ class SupplyController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Supplies/Create');
+        return Inertia::render('supplies/Create');
     }
 
     /**
@@ -52,7 +52,7 @@ class SupplyController extends Controller
      */
     public function show(Supply $supply)
     {
-        return Inertia::render('Supplies/Show', [
+        return Inertia::render('supplies/Show', [
             'supply' => $supply,
         ]);
     }
@@ -62,7 +62,7 @@ class SupplyController extends Controller
      */
     public function edit(Supply $supply)
     {
-        return Inertia::render('Supplies/Edit', [
+        return Inertia::render('supplies/Edit', [
             'supply' => $supply,
         ]);
     }

@@ -26,7 +26,7 @@ class MedicalHistoryController extends Controller
             throw $e;
         }
 
-        return Inertia::render('MedicalHistories/Index', [
+        return Inertia::render('medical-histories/Index', [
             'medicalHistories' => $medicalHistories,
         ]);
     }
@@ -39,7 +39,7 @@ class MedicalHistoryController extends Controller
         $animals = Animal::all();
         $veterinarians = User::role('VETERINARIO')->get();
 
-        return Inertia::render('MedicalHistories/Create', [
+        return Inertia::render('medical-histories/Create', [
             'animals' => $animals,
             'veterinarians' => $veterinarians,
         ]);
@@ -62,7 +62,7 @@ class MedicalHistoryController extends Controller
     {
         $medicalHistory->load(['animal', 'veterinarian']);
 
-        return Inertia::render('MedicalHistories/Show', [
+        return Inertia::render('medical-histories/Show', [
             'medicalHistory' => $medicalHistory,
         ]);
     }
@@ -75,7 +75,7 @@ class MedicalHistoryController extends Controller
         $animals = Animal::all();
         $veterinarians = User::role('VETERINARIO')->get();
 
-        return Inertia::render('MedicalHistories/Edit', [
+        return Inertia::render('medical-histories/Edit', [
             'medicalHistory' => $medicalHistory,
             'animals' => $animals,
             'veterinarians' => $veterinarians,

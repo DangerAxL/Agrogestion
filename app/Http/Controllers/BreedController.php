@@ -24,7 +24,7 @@ class BreedController extends Controller
             throw $e;
         }
 
-        return Inertia::render('Breeds/Index', [
+        return Inertia::render('breeds/Index', [
             'breeds' => $breeds,
         ]);
     }
@@ -34,7 +34,7 @@ class BreedController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Breeds/Create');
+        return Inertia::render('breeds/Create');
     }
 
     /**
@@ -54,7 +54,7 @@ class BreedController extends Controller
     {
         $breed->load('animals');
 
-        return Inertia::render('Breeds/Show', [
+        return Inertia::render('breeds/Show', [
             'breed' => $breed,
         ]);
     }
@@ -64,7 +64,7 @@ class BreedController extends Controller
      */
     public function edit(Breed $breed)
     {
-        return Inertia::render('Breeds/Edit', [
+        return Inertia::render('breeds/Edit', [
             'breed' => $breed,
         ]);
     }
