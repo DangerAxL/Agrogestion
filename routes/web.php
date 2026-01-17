@@ -5,7 +5,9 @@ use App\Models\Feeding;
 use App\Models\Lot;
 use App\Models\Supply;
 use App\Models\Weighing;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -19,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $totalLots = Lot::count();
         $totalSupplies = Supply::count();
         $averageWeight = Weighing::avg('weight') ?? 0;
+
         $totalFeedingsThisWeek = Feeding::where('date', '>=', now()->startOfWeek())->sum('total_ration') ?? 0;
         $totalFeedingsThisMonth = Feeding::where('date', '>=', now()->startOfMonth())->sum('total_ration') ?? 0;
         $efficiency = $totalAnimals > 0 ? ($totalFeedingsThisMonth / $totalAnimals) : 0;
@@ -66,4 +69,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/notifications/{notification}', [App\Http\Controllers\NotificationController::class, 'destroy']);
 });
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
